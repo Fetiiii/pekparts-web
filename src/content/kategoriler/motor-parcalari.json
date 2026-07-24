@@ -1,0 +1,11 @@
+{
+  "slug": "motor-parcalari",
+  "sira": 3,
+  "ikon": "settings-cog",
+  "ad": {
+    "tr": "Motor parçaları",
+    "en": "Engine parts",
+    "ar": "قطع غيار المحرك",
+    "ru": "Детали двигателя"
+  }
+}

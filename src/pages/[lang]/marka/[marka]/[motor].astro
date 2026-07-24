@@ -1,0 +1,37 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import UrunListe from "@/components/UrunListe.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { tumUrunler, markaMotorCiftleri } from "@/lib/katalog";
+
+export async function getStaticPaths() {
+  const ciftler = await markaMotorCiftleri();
+  return diller.flatMap((lang) =>
+    ciftler.map((c) => ({
+      params: { lang, marka: c.markaSlug, motor: c.motor.slug },
+    })),
+  );
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const { marka, motor } = Astro.params;
+const t = ceviriYap(aktifDil);
+
+const urunler = (await tumUrunler()).filter(
+  (u) => u.markaSlug === marka && u.motorlar.some((m) => m.slug === motor),
+);
+const markaAd = urunler[0]?.markaAd ?? marka!;
+const motorAd = urunler[0]?.motorlar.find((m) => m.slug === motor)?.ad ?? motor!;
+const baslik = t("liste.markaMotorBaslik", { marka: markaAd, motor: motorAd });
+---
+
+<Layout baslik={baslik}>
+  <UrunListe
+    aktifDil={aktifDil}
+    baslik={baslik}
+    ustBaslik={t("urun.uyumluMotorlar")}
+    urunler={urunler}
+    goster={["kategori", "stok"]}
+  />
+</Layout>

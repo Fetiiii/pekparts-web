@@ -1,0 +1,13 @@
+# Netlify yapılandırması. Ortam değişkenleri (SANITY_*, RESEND_API_KEY, CANLI=1,
+# TEKLIF_FROM, TALEP_EPOSTA, SANITY_WRITE_TOKEN) Netlify panelinden girilir.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Sanity webhook → yeniden derleme: Netlify'da "Build hooks" ile oluşturulan
+# URL, Sanity proje ayarlarında (API → Webhooks) POST hedefi olarak tanımlanır.
+# Böylece panelde kaydedilen değişiklik birkaç dakika içinde siteye yansır.

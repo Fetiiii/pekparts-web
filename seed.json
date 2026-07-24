@@ -1,0 +1,179 @@
+{
+  "_uyari": "BU DOSYA TEST VERISIDIR. 04910987, 04286036, 04280528, 04175848, 04175464 ve 02230975 disindaki tum parca numaralari, fiyatlar, stok durumlari ve motor uyumluluklari UYDURMADIR. Gercek katalog gelince bu dosya tamamen silinecek. Asla yayina alinmayacak.",
+
+  "kategoriler": [
+    { "slug": "conta-takimlari", "sira": 1, "ikon": "layers-intersect",
+      "ad": { "tr": "Conta takımları", "en": "Gasket sets", "ar": "أطقم الجوانات", "ru": "Комплекты прокладок" } },
+    { "slug": "filtreler", "sira": 2, "ikon": "filter",
+      "ad": { "tr": "Filtreler", "en": "Filters", "ar": "الفلاتر", "ru": "Фильтры" } },
+    { "slug": "motor-parcalari", "sira": 3, "ikon": "settings-cog",
+      "ad": { "tr": "Motor parçaları", "en": "Engine parts", "ar": "قطع غيار المحرك", "ru": "Детали двигателя" } },
+    { "slug": "yakit-sistemi", "sira": 4, "ikon": "gas-station",
+      "ad": { "tr": "Yakıt sistemi", "en": "Fuel system", "ar": "نظام الوقود", "ru": "Топливная система" } },
+    { "slug": "sogutma-sistemi", "sira": 5, "ikon": "temperature",
+      "ad": { "tr": "Soğutma sistemi", "en": "Cooling system", "ar": "نظام التبريد", "ru": "Система охлаждения" } },
+    { "slug": "komple-motorlar", "sira": 6, "ikon": "engine",
+      "ad": { "tr": "Komple motorlar", "en": "Complete engines", "ar": "محركات كاملة", "ru": "Двигатели в сборе" } }
+  ],
+
+  "markalar": [
+    { "slug": "deutz", "ad": "Deutz", "sira": 1, "logoKullanimIzni": false },
+    { "slug": "perkins", "ad": "Perkins", "sira": 2, "logoKullanimIzni": false },
+    { "slug": "cummins", "ad": "Cummins", "sira": 3, "logoKullanimIzni": false },
+    { "slug": "caterpillar", "ad": "Caterpillar", "sira": 4, "logoKullanimIzni": false },
+    { "slug": "massey-ferguson", "ad": "Massey Ferguson", "sira": 5, "logoKullanimIzni": false },
+    { "slug": "jcb", "ad": "JCB", "sira": 6, "logoKullanimIzni": false }
+  ],
+
+  "urunler": [
+    {
+      "parcaNo": "04910987", "muadilNo": [], "marka": "deutz", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["BF4M 1013", "BF6M 1013", "TCD 2013 L04"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 48500, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04910987-1.jpg" }, { "dosya": "04910987-2.jpg" }],
+      "oneCikan": true, "yayinda": true, "eklenmeTarihi": "2026-05-14",
+      "ad": { "tr": "Deutz silindir kapağı", "en": "Deutz cylinder head", "ar": "رأس أسطوانة ديوتز", "ru": "Головка блока цилиндров Deutz" },
+      "aciklama": { "tr": "BF4M 1013 ve BF6M 1013 serisi motorlar için orijinal silindir kapağı. Supap yuvaları işlenmiş halde teslim edilir.", "en": "Original cylinder head for BF4M 1013 and BF6M 1013 series engines. Delivered with machined valve seats." }
+    },
+    {
+      "parcaNo": "04175848", "muadilNo": ["0417 5848"], "marka": "deutz", "kategori": "yakit-sistemi",
+      "uyumluMotorlar": ["TCD 2012 L04", "TCD 2012 L06", "BF4M 2012", "BF6M 2012"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 96200, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04175848-1.jpg" }],
+      "oneCikan": true, "yayinda": true, "eklenmeTarihi": "2026-05-14",
+      "ad": { "tr": "Deutz yakıt enjeksiyon pompası", "en": "Deutz fuel injection pump", "ar": "مضخة حقن الوقود ديوتز", "ru": "Топливный насос высокого давления Deutz" },
+      "aciklama": { "tr": "TCD 2012 serisi için orijinal yakıt enjeksiyon pompası.", "en": "Original fuel injection pump for the TCD 2012 series." }
+    },
+    {
+      "parcaNo": "02230975", "muadilNo": [], "marka": "deutz", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["BF6M 1013", "TCD 2013 L06"],
+      "stokDurumu": "siparise-bagli", "durum": "orijinal", "fiyat": 31400, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "02230975-1.jpg" }],
+      "oneCikan": true, "yayinda": true, "eklenmeTarihi": "2026-05-10",
+      "ad": { "tr": "Deutz yağ pompası", "en": "Deutz oil pump", "ar": "مضخة زيت ديوتز", "ru": "Масляный насос Deutz" },
+      "aciklama": { "tr": "Stokta bulunmadığında 5-7 iş günü içinde tedarik edilir.", "en": "Supplied within 5-7 business days when not in stock." }
+    },
+    {
+      "parcaNo": "04175464", "muadilNo": ["04175462"], "marka": "deutz", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["TCD 2012 L06"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 74000, "paraBirimi": "TRY",
+      "gorseller": [],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-05-09",
+      "ad": { "tr": "Deutz hidrolik pompa", "en": "Deutz hydraulic pump" },
+      "aciklama": { "tr": "Eski sitede bu üründe iki farklı numara geçiyordu; hangisinin doğru olduğu teyit edilecek." }
+    },
+    {
+      "parcaNo": "04280528", "muadilNo": [], "marka": "deutz", "kategori": "motor-parcalari",
+      "uyumluMotorlar": [],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 12750, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04280528-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-05-08",
+      "ad": { "tr": "Deutz hidrolik pompa kaplini", "en": "Deutz clutch sleeve" }
+    },
+    {
+      "parcaNo": "04286036", "muadilNo": [], "marka": "deutz", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["TCD 2013 L04"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 6900, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04286036-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-05-08",
+      "ad": { "tr": "Deutz adaptör", "en": "Deutz bracket" }
+    },
+    {
+      "parcaNo": "04256803", "muadilNo": ["4256803", "0425 6803"], "marka": "deutz", "kategori": "conta-takimlari",
+      "uyumluMotorlar": ["BF4M 2012", "BF4M 2012 C", "TCD 2012 L04"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 18900, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04256803-1.jpg" }],
+      "oneCikan": true, "yayinda": true, "eklenmeTarihi": "2026-06-02",
+      "ad": { "tr": "Deutz üst takım conta", "en": "Deutz upper gasket set", "ar": "طقم جوانات علوي ديوتز", "ru": "Верхний комплект прокладок Deutz" },
+      "aciklama": { "tr": "Silindir kapak contası, supap kapak contası ve manifold contalarını içerir.", "en": "Includes head gasket, valve cover gasket and manifold gaskets." }
+    },
+    {
+      "parcaNo": "01182672", "muadilNo": ["1182672"], "marka": "deutz", "kategori": "filtreler",
+      "uyumluMotorlar": ["BF4M 1013", "BF6M 1013", "TCD 2013 L04", "TCD 2013 L06", "BF4M 2012", "BF6M 2012"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 1450, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "01182672-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-06-11",
+      "ad": { "tr": "Deutz yağ filtresi", "en": "Deutz oil filter", "ar": "فلتر زيت ديوتز", "ru": "Масляный фильтр Deutz" }
+    },
+    {
+      "parcaNo": "04270318", "muadilNo": [], "marka": "deutz", "kategori": "sogutma-sistemi",
+      "uyumluMotorlar": ["TCD 2012 L04"],
+      "stokDurumu": "tukendi", "durum": "orijinal", "fiyat": 22300, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "04270318-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-04-21",
+      "ad": { "tr": "Deutz su pompası", "en": "Deutz water pump", "ar": "مضخة ماء ديوتز", "ru": "Водяной насос Deutz" }
+    },
+    {
+      "parcaNo": "TCD2012L04-REV", "muadilNo": [], "marka": "deutz", "kategori": "komple-motorlar",
+      "uyumluMotorlar": ["TCD 2012 L04"],
+      "stokDurumu": "siparise-bagli", "durum": "revizyonlu", "fiyat": 18500, "paraBirimi": "USD",
+      "gorseller": [{ "dosya": "tcd2012l04-1.jpg" }, { "dosya": "tcd2012l04-2.jpg" }, { "dosya": "tcd2012l04-3.jpg" }],
+      "oneCikan": true, "yayinda": true, "eklenmeTarihi": "2026-06-30",
+      "ad": { "tr": "Deutz TCD 2012 L04 revizyonlu komple motor — test edilmiş, garantili, montaja hazır teslim", "en": "Deutz TCD 2012 L04 remanufactured complete engine — tested, warranted, ready for installation" },
+      "aciklama": { "tr": "Tam revizyondan geçmiş, test edilmiş komple motor. 6 ay garantilidir." }
+    },
+    {
+      "parcaNo": "2645A050", "muadilNo": ["2645A050P"], "marka": "perkins", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["1104C-44", "1104D-44T"],
+      "stokDurumu": "stokta", "durum": "orijinal", "fiyat": 41800, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "2645a050-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-06-18",
+      "ad": { "tr": "Perkins silindir kapağı", "en": "Perkins cylinder head", "ar": "رأس أسطوانة بيركنز", "ru": "Головка блока цилиндров Perkins" }
+    },
+    {
+      "parcaNo": "U5MK8564", "muadilNo": [], "marka": "perkins", "kategori": "filtreler",
+      "uyumluMotorlar": ["1104C-44", "1103A-33"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 980, "paraBirimi": "TRY",
+      "gorseller": [],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-06-18",
+      "ad": { "tr": "Perkins yakıt filtresi", "en": "Perkins fuel filter" }
+    },
+    {
+      "parcaNo": "3802429", "muadilNo": ["380 2429", "3802429NX"], "marka": "cummins", "kategori": "conta-takimlari",
+      "uyumluMotorlar": ["6BT 5.9", "6BTA 5.9"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 15600, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "3802429-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-07-01",
+      "ad": { "tr": "Cummins alt takım conta", "en": "Cummins lower gasket set", "ar": "طقم جوانات سفلي كمنز", "ru": "Нижний комплект прокладок Cummins" }
+    },
+    {
+      "parcaNo": "3937144", "muadilNo": [], "marka": "cummins", "kategori": "yakit-sistemi",
+      "uyumluMotorlar": ["6BT 5.9"],
+      "stokDurumu": "siparise-bagli", "durum": "orijinal", "fiyat": 2400, "paraBirimi": "USD",
+      "gorseller": [{ "dosya": "3937144-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-07-03",
+      "ad": { "tr": "Cummins yakıt pompası", "en": "Cummins fuel pump" }
+    },
+    {
+      "parcaNo": "1S9036", "muadilNo": [], "marka": "caterpillar", "kategori": "motor-parcalari",
+      "uyumluMotorlar": ["3306", "3306B"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 8700, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "1s9036-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-06-25",
+      "ad": { "tr": "Caterpillar piston segman takımı", "en": "Caterpillar piston ring set" }
+    },
+    {
+      "parcaNo": "7W2326", "muadilNo": [], "marka": "caterpillar", "kategori": "sogutma-sistemi",
+      "uyumluMotorlar": [],
+      "stokDurumu": "tukendi", "durum": "orijinal", "gorseller": [],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-03-02",
+      "ad": { "tr": "Caterpillar termostat" }
+    },
+    {
+      "parcaNo": "4224861M1", "muadilNo": ["4224861 M1"], "marka": "massey-ferguson", "kategori": "filtreler",
+      "uyumluMotorlar": ["MF 240", "MF 285"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 640, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "4224861m1-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-07-08",
+      "ad": { "tr": "Massey Ferguson hava filtresi", "en": "Massey Ferguson air filter" }
+    },
+    {
+      "parcaNo": "320/04133", "muadilNo": ["32004133"], "marka": "jcb", "kategori": "filtreler",
+      "uyumluMotorlar": ["JCB 3CX", "JCB 4CX"],
+      "stokDurumu": "stokta", "durum": "muadil", "fiyat": 1180, "paraBirimi": "TRY",
+      "gorseller": [{ "dosya": "320-04133-1.jpg" }],
+      "oneCikan": false, "yayinda": true, "eklenmeTarihi": "2026-07-12",
+      "ad": { "tr": "JCB yağ filtresi", "en": "JCB oil filter" }
+    }
+  ]
+}

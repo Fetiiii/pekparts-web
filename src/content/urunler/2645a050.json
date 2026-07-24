@@ -1,0 +1,30 @@
+{
+  "parcaNo": "2645A050",
+  "muadilNo": [
+    "2645A050P"
+  ],
+  "marka": "perkins",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [
+    "1104C-44",
+    "1104D-44T"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 41800,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "2645a050-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-18",
+  "ad": {
+    "tr": "Perkins silindir kapağı",
+    "en": "Perkins cylinder head",
+    "ar": "رأس أسطوانة بيركنز",
+    "ru": "Головка блока цилиндров Perkins"
+  }
+}

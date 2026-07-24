@@ -1,0 +1,11 @@
+{
+  "slug": "yakit-sistemi",
+  "sira": 4,
+  "ikon": "gas-station",
+  "ad": {
+    "tr": "Yakıt sistemi",
+    "en": "Fuel system",
+    "ar": "نظام الوقود",
+    "ru": "Топливная система"
+  }
+}

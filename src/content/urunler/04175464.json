@@ -1,0 +1,26 @@
+{
+  "parcaNo": "04175464",
+  "muadilNo": [
+    "04175462"
+  ],
+  "marka": "deutz",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [
+    "TCD 2012 L06"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 74000,
+  "paraBirimi": "TRY",
+  "gorseller": [],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-05-09",
+  "ad": {
+    "tr": "Deutz hidrolik pompa",
+    "en": "Deutz hydraulic pump"
+  },
+  "aciklama": {
+    "tr": "Eski sitede bu üründe iki farklı numara geçiyordu; hangisinin doğru olduğu teyit edilecek."
+  }
+}

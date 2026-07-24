@@ -1,0 +1,62 @@
+---
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { marka, telLink } from "@/site";
+import type { Ayarlar } from "@/lib/tipler";
+
+interface Props {
+  aktifDil: Dil;
+  ayarlar: Ayarlar;
+}
+const { aktifDil, ayarlar } = Astro.props;
+const t = ceviriYap(aktifDil);
+const yil = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-kenarlik bg-yuzey text-sm">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <p class="text-base font-bold">{marka.ad}</p>
+      <p class="mt-1 text-murekkep/70">{marka.unvan}</p>
+      <p class="mt-3 text-murekkep/70">{t("footer.markaNot")}</p>
+    </div>
+
+    <div>
+      <h2 class="mb-2 font-semibold">{t("footer.iletisim")}</h2>
+      <ul class="space-y-1 text-murekkep/80">
+        <li>
+          <a href={telLink(ayarlar.telefon)} class="hover:underline">
+            <span class="parca-no">{ayarlar.telefon}</span>
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${ayarlar.eposta}`} class="hover:underline">{ayarlar.eposta}</a>
+        </li>
+        <li>{ayarlar.adres}</li>
+        <li>{ayarlar.calismaSaatleri}</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-2 font-semibold">{t("footer.hakkinda")}</h2>
+      <ul class="space-y-1 text-murekkep/80">
+        <li><a href={dilliYol(aktifDil, "hakkimizda")} class="hover:underline">{t("nav.hakkimizda")}</a></li>
+        <li><a href={dilliYol(aktifDil, "iletisim")} class="hover:underline">{t("nav.iletisim")}</a></li>
+        <li><a href={dilliYol(aktifDil, "urunler")} class="hover:underline">{t("nav.urunler")}</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-2 font-semibold">{t("footer.yasal")}</h2>
+      <ul class="space-y-1 text-murekkep/80">
+        <li><a href={dilliYol(aktifDil, "kvkk")} class="hover:underline">{t("footer.kvkk")}</a></li>
+        <li><a href={dilliYol(aktifDil, "cerez-politikasi")} class="hover:underline">{t("footer.cerez")}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-kenarlik">
+    <div class="mx-auto max-w-6xl px-4 py-4 text-xs text-murekkep/60">
+      © {yil} {marka.unvan}. {t("footer.haklar")}
+    </div>
+  </div>
+</footer>

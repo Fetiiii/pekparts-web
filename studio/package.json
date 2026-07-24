@@ -1,0 +1,26 @@
+{
+  "name": "pekparts-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "test:excel": "node --experimental-strip-types lib/urun-excel.test.ts"
+  },
+  "dependencies": {
+    "@sanity/ui": "^2",
+    "@sanity/vision": "^3",
+    "exceljs": "^4.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sanity": "^3",
+    "styled-components": "^6"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "typescript": "^5"
+  }
+}

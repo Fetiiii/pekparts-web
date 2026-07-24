@@ -1,0 +1,27 @@
+{
+  "parcaNo": "04270318",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "sogutma-sistemi",
+  "uyumluMotorlar": [
+    "TCD 2012 L04"
+  ],
+  "stokDurumu": "tukendi",
+  "durum": "orijinal",
+  "fiyat": 22300,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "04270318-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-04-21",
+  "ad": {
+    "tr": "Deutz su pompası",
+    "en": "Deutz water pump",
+    "ar": "مضخة ماء ديوتز",
+    "ru": "Водяной насос Deutz"
+  }
+}

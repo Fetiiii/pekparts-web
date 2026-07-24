@@ -1,0 +1,25 @@
+{
+  "parcaNo": "3937144",
+  "muadilNo": [],
+  "marka": "cummins",
+  "kategori": "yakit-sistemi",
+  "uyumluMotorlar": [
+    "6BT 5.9"
+  ],
+  "stokDurumu": "siparise-bagli",
+  "durum": "orijinal",
+  "fiyat": 2400,
+  "paraBirimi": "USD",
+  "gorseller": [
+    {
+      "dosya": "3937144-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-07-03",
+  "ad": {
+    "tr": "Cummins yakıt pompası",
+    "en": "Cummins fuel pump"
+  }
+}

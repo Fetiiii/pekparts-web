@@ -1,0 +1,25 @@
+{
+  "parcaNo": "04286036",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [
+    "TCD 2013 L04"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 6900,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "04286036-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-05-08",
+  "ad": {
+    "tr": "Deutz adaptör",
+    "en": "Deutz bracket"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parcaNo": "1S9036",
+  "muadilNo": [],
+  "marka": "caterpillar",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [
+    "3306",
+    "3306B"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 8700,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "1s9036-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-25",
+  "ad": {
+    "tr": "Caterpillar piston segman takımı",
+    "en": "Caterpillar piston ring set"
+  }
+}

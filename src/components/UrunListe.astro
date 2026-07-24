@@ -1,0 +1,61 @@
+---
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import type { ZenginUrun } from "@/lib/katalog";
+import UrunKart from "./UrunKart.astro";
+import FiltreBar from "./FiltreBar.astro";
+
+interface Props {
+  aktifDil: Dil;
+  baslik: string;
+  ustBaslik?: string; // örn. marka adı (kırıntı/bağlam)
+  urunler: ZenginUrun[];
+  goster?: ("kategori" | "marka" | "motor" | "stok")[];
+}
+const {
+  aktifDil,
+  baslik,
+  ustBaslik,
+  urunler,
+  goster = ["kategori", "marka", "motor", "stok"],
+} = Astro.props;
+const t = ceviriYap(aktifDil);
+---
+
+<section class="mx-auto max-w-6xl px-4 py-8" data-urun-liste>
+  <div class="mb-4">
+    {ustBaslik && <p class="text-sm text-murekkep/60">{ustBaslik}</p>}
+    <h1 class="text-2xl font-bold tracking-tight">{baslik}</h1>
+    <p
+      class="mt-1 text-sm text-murekkep/60"
+      data-sayac
+      data-sablon={t("liste.sonucSayisi")}
+      aria-live="polite"
+    >
+      {t("liste.sonucSayisi", { sayi: urunler.length })}
+    </p>
+  </div>
+
+  <FiltreBar aktifDil={aktifDil} urunler={urunler} goster={goster} />
+
+  {
+    urunler.length > 0 ? (
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {urunler.map((u) => (
+          <UrunKart urun={u} aktifDil={aktifDil} />
+        ))}
+      </div>
+    ) : (
+      <p class="rounded border border-kenarlik bg-yuzey p-6 text-murekkep/70">
+        {t("liste.sonucYok")}
+      </p>
+    )
+  }
+
+  <p data-bos hidden class="mt-4 rounded border border-kenarlik bg-yuzey p-6 text-murekkep/70">
+    {t("liste.sonucYok")}
+  </p>
+</section>
+
+<script>
+  import "@/scripts/filtre.ts";
+</script>

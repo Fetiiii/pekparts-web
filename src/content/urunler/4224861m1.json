@@ -1,0 +1,28 @@
+{
+  "parcaNo": "4224861M1",
+  "muadilNo": [
+    "4224861 M1"
+  ],
+  "marka": "massey-ferguson",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "MF 240",
+    "MF 285"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 640,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "4224861m1-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-07-08",
+  "ad": {
+    "tr": "Massey Ferguson hava filtresi",
+    "en": "Massey Ferguson air filter"
+  }
+}

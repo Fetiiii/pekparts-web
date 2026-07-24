@@ -1,0 +1,28 @@
+{
+  "parcaNo": "320/04133",
+  "muadilNo": [
+    "32004133"
+  ],
+  "marka": "jcb",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "JCB 3CX",
+    "JCB 4CX"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 1180,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "320-04133-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-07-12",
+  "ad": {
+    "tr": "JCB yağ filtresi",
+    "en": "JCB oil filter"
+  }
+}

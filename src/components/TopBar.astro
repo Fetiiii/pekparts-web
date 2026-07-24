@@ -1,0 +1,41 @@
+---
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { whatsappLink, telLink } from "@/site";
+import type { Ayarlar } from "@/lib/tipler";
+import LangSwitcher from "./LangSwitcher.astro";
+
+interface Props {
+  aktifDil: Dil;
+  url: URL;
+  ayarlar: Ayarlar;
+}
+const { aktifDil, url, ayarlar } = Astro.props;
+const t = ceviriYap(aktifDil);
+---
+
+<div class="border-b border-kenarlik bg-murekkep text-kagit">
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-1.5 text-sm"
+  >
+    <div class="flex items-center gap-4">
+      <a href={telLink(ayarlar.telefon)} class="flex items-center gap-1.5 text-kagit hover:underline">
+        <span aria-hidden="true">☎</span>
+        <span class="gorsel-gizli">{t("ustbar.telefon")}:</span>
+        <span class="parca-no">{ayarlar.telefon}</span>
+      </a>
+      <a
+        href={whatsappLink(ayarlar.whatsapp, t("whatsapp.mesaj"))}
+        rel="noopener"
+        class="hidden items-center gap-1.5 text-kagit hover:underline sm:flex"
+      >
+        <span aria-hidden="true">✆</span>
+        <span>{t("ustbar.whatsapp")}</span>
+      </a>
+    </div>
+
+    <!-- Dil seçici koyu şeritte; okunurluk için açık zemin sarıyoruz. -->
+    <div class="rounded bg-kagit text-murekkep">
+      <LangSwitcher aktifDil={aktifDil} url={url} />
+    </div>
+  </div>
+</div>

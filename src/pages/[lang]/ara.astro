@@ -1,0 +1,72 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SearchBox from "@/components/SearchBox.astro";
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { getAyarlar } from "@/lib/ayarlar";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+const ayarlar = await getAyarlar();
+
+// İstemci betiğine geçirilecek yapılandırma (dil + çeviriler + WhatsApp).
+const config = {
+  lang: aktifDil,
+  indexUrl: "/arama-index.json",
+  whatsapp: ayarlar.whatsapp,
+  waMesaj: t("ara.waMesaj"),
+  urunYol: dilliYol(aktifDil, "urun/"),
+  araYol: dilliYol(aktifDil, "ara"),
+  ceviri: {
+    fiyatSor: t("urun.fiyatSor"),
+    digerMotor: t("urun.digerMotor"),
+    sonucSayisi: t("ara.sonucSayisi"),
+    aranan: t("ara.aranan"),
+    bosBaslik: t("ara.bosBaslik"),
+    bosMetin: t("ara.bosMetin"),
+    whatsappBos: t("ara.whatsappBos"),
+    yukleniyor: t("ara.yukleniyor"),
+    stok: {
+      stokta: t("stok.stokta"),
+      "siparise-bagli": t("stok.siparise-bagli"),
+      tukendi: t("stok.tukendi"),
+    },
+  },
+};
+---
+
+<Layout baslik={t("ara.baslik")}>
+  <section class="mx-auto max-w-6xl px-4 py-8" data-ara>
+    <h1 class="text-2xl font-bold tracking-tight">{t("ara.baslik")}</h1>
+
+    <div class="mt-4 max-w-xl">
+      <SearchBox aktifDil={aktifDil} buyuk />
+    </div>
+    <p class="mt-2 text-sm text-murekkep/60">{t("ara.ipucu")}</p>
+
+    <!-- Ekran okuyucuya sonuç sayısını bildirir -->
+    <p class="mt-4 text-sm text-murekkep/60" data-ara-durum aria-live="polite" role="status"></p>
+
+    <!-- JS yoksa: arama çalışmaz, doğrudan iletişim yönlendirmesi -->
+    <noscript>
+      <p class="mt-6 rounded border border-kenarlik bg-yuzey p-6 text-murekkep/70">
+        {t("ara.jsGerekli")}
+      </p>
+    </noscript>
+
+    <div class="mt-6" data-ara-sonuc></div>
+  </section>
+
+  <script
+    type="application/json"
+    id="ara-config"
+    set:html={JSON.stringify(config)}
+  />
+  <script>
+    import "@/scripts/arama.ts";
+  </script>
+</Layout>

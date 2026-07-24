@@ -1,0 +1,13 @@
+# build çıktısı
+dist/
+# astro üretilen türler / önbellek
+.astro/
+# bağımlılıklar
+node_modules/
+# ortam
+.env
+.env.*
+!.env.example
+# işletim sistemi
+.DS_Store
+Thumbs.db

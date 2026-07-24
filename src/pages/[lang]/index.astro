@@ -1,0 +1,61 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SearchBox from "@/components/SearchBox.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { whatsappLink } from "@/site";
+import { getAyarlar } from "@/lib/ayarlar";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+const ayarlar = await getAyarlar();
+---
+
+<Layout>
+  <!-- Hero: sayfanın odağı büyük parça numarası arama kutusu (§4). -->
+  <section class="border-b border-kenarlik bg-yuzey">
+    <div class="mx-auto max-w-6xl px-4 py-14 sm:py-20">
+      <div class="max-w-2xl">
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+          {t("hero.baslik")}
+        </h1>
+        <p class="mt-4 text-lg text-murekkep/75">{t("hero.altbaslik")}</p>
+        <div class="mt-8 max-w-xl">
+          <SearchBox aktifDil={aktifDil} buyuk />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aşama 1: katalog bölümleri (kategoriler, öne çıkanlar) Aşama 2'de
+       içerik sisteminden gelecek. Şimdilik dürüst bir yer tutucu. -->
+  <section class="mx-auto max-w-6xl px-4 py-14">
+    <div class="rounded border border-kenarlik bg-kagit p-8 text-center">
+      <h2 class="text-xl font-semibold">{t("yapim.baslik")}</h2>
+      <p class="mx-auto mt-3 max-w-md text-murekkep/70">{t("yapim.metin")}</p>
+    </div>
+  </section>
+
+  <!-- İletişim şeridi (§4.8): "Parça mı arıyorsunuz?" + WhatsApp -->
+  <section class="border-t border-kenarlik bg-murekkep text-kagit">
+    <div
+      class="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <h2 class="text-xl font-semibold">{t("iletisim.baslik")}</h2>
+        <p class="mt-1 text-kagit/75">{t("iletisim.metin")}</p>
+      </div>
+      <a
+        href={whatsappLink(ayarlar.whatsapp, t("whatsapp.mesaj"))}
+        rel="noopener"
+        class="shrink-0 rounded bg-kagit px-5 py-3 font-medium text-murekkep no-underline hover:bg-yuzey"
+      >
+        {t("whatsapp.acikla")}
+      </a>
+    </div>
+  </section>
+</Layout>

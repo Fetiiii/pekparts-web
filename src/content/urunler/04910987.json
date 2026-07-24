@@ -1,0 +1,36 @@
+{
+  "parcaNo": "04910987",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [
+    "BF4M 1013",
+    "BF6M 1013",
+    "TCD 2013 L04"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 48500,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "04910987-1.jpg"
+    },
+    {
+      "dosya": "04910987-2.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-05-14",
+  "ad": {
+    "tr": "Deutz silindir kapağı",
+    "en": "Deutz cylinder head",
+    "ar": "رأس أسطوانة ديوتز",
+    "ru": "Головка блока цилиндров Deutz"
+  },
+  "aciklama": {
+    "tr": "BF4M 1013 ve BF6M 1013 serisi motorlar için orijinal silindir kapağı. Supap yuvaları işlenmiş halde teslim edilir.",
+    "en": "Original cylinder head for BF4M 1013 and BF6M 1013 series engines. Delivered with machined valve seats."
+  }
+}

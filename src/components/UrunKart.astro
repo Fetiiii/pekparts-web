@@ -1,0 +1,86 @@
+---
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { yerelDeger, type ZenginUrun } from "@/lib/katalog";
+import Rozet from "./Rozet.astro";
+
+interface Props {
+  urun: ZenginUrun;
+  aktifDil: Dil;
+}
+const { urun, aktifDil } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+const ad = yerelDeger(urun.ad, aktifDil);
+const detayYol = dilliYol(aktifDil, `urun/${urun.slug}`);
+
+// Görsel URL'i adaptörde çözülür (yerel dosya veya Sanity CDN). Yoksa yer tutucu.
+const kapak = urun.gorseller.find((g) => g.url) ?? urun.gorseller[0];
+const kapakUrl = kapak?.url ?? null;
+const kapakAlt = kapak?.alt
+  ? yerelDeger(kapak.alt, aktifDil)
+  : t("urun.gorselAcilim", { ad, no: urun.parcaNo });
+
+// Motor özeti: ilk 2 + kalanı say.
+const motorGoster = urun.motorlar.slice(0, 2);
+const motorKalan = urun.motorlar.length - motorGoster.length;
+
+// Filtre için data-öznitelikleri (istemci tarafı filtreleme okur).
+const motorSluglari = urun.motorlar.map((m) => m.slug).join(",");
+---
+
+<article
+  class="urun-kart flex h-full flex-col overflow-hidden rounded border border-kenarlik bg-kagit"
+  data-kategori={urun.kategoriSlug}
+  data-marka={urun.markaSlug}
+  data-motor={motorSluglari}
+  data-stok={urun.stokDurumu}
+>
+  <a
+    href={detayYol}
+    class="block aspect-4/3 overflow-hidden border-b border-kenarlik bg-yuzey no-underline"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    {
+      kapakUrl ? (
+        <img
+          src={kapakUrl}
+          alt={kapakAlt}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover"
+        />
+      ) : (
+        <span class="flex h-full w-full flex-col items-center justify-center gap-1 text-murekkep/40">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v10M7 12h10" />
+          </svg>
+          <span class="text-xs">{t("urun.gorselYok")}</span>
+        </span>
+      )
+    }
+  </a>
+
+  <div class="flex flex-1 flex-col gap-2 p-3">
+    <p class="parca-no text-sm font-semibold text-bakir-koyu">{urun.parcaNo}</p>
+
+    <h3 class="text-sm leading-snug font-medium">
+      <a href={detayYol} class="text-murekkep no-underline hover:text-vurgu">{ad}</a>
+    </h3>
+
+    {
+      urun.motorlar.length > 0 && (
+        <p class="parca-no text-xs text-murekkep/60">
+          {motorGoster.map((m) => m.ad).join(" · ")}
+          {motorKalan > 0 && ` ${t("urun.digerMotor", { sayi: motorKalan })}`}
+        </p>
+      )
+    }
+
+    <div class="mt-auto flex items-center justify-between gap-2 pt-1">
+      <Rozet tip="stok" deger={urun.stokDurumu} aktifDil={aktifDil} />
+      <span class="text-xs font-medium text-vurgu">{t("urun.fiyatSor")}</span>
+    </div>
+  </div>
+</article>

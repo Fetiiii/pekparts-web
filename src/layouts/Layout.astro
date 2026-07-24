@@ -1,0 +1,102 @@
+---
+import "@/styles/global.css";
+
+// Fontlar YEREL yüklenir (CDN yok — Şartname §3/§10, kural). @fontsource
+// paketleri font dosyalarını build'e gömer.
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-sans/700.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/ibm-plex-sans-arabic/400.css";
+import "@fontsource/ibm-plex-sans-arabic/600.css";
+
+import { dilBul, ceviriYap, yolunGerisi, yon } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { marka } from "@/site";
+import { getAyarlar } from "@/lib/ayarlar";
+import TopBar from "@/components/TopBar.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import WhatsAppButton from "@/components/WhatsAppButton.astro";
+
+interface Props {
+  baslik?: string;
+  aciklama?: string;
+}
+
+const aktifDil = dilBul(Astro.url);
+const t = ceviriYap(aktifDil);
+const dir = yon(aktifDil);
+const ayarlar = await getAyarlar();
+
+const { baslik, aciklama } = Astro.props;
+const sayfaBaslik = baslik ? `${baslik} · ${marka.ad}` : `${marka.ad} — ${marka.unvan}`;
+const sayfaAciklama = aciklama ?? t("site.aciklama");
+
+// hreflang: her dil için, dil öneki soyulmuş yol üzerinden mutlak URL.
+const kalanYol = yolunGerisi(Astro.url); // öneksiz yol
+const altUrl = (d: string) =>
+  new URL(kalanYol ? `/${d}/${kalanYol}` : `/${d}/`, Astro.site).href;
+const kanonik = altUrl(aktifDil);
+---
+
+<!doctype html>
+<html lang={aktifDil} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{sayfaBaslik}</title>
+    <meta name="description" content={sayfaAciklama} />
+    <link rel="canonical" href={kanonik} />
+
+    <!-- hreflang — Şartname §7/§11. Her dil + x-default (varsayılan dile). -->
+    {diller.map((d) => <link rel="alternate" hreflang={d} href={altUrl(d)} />)}
+    <link rel="alternate" hreflang="x-default" href={altUrl("tr")} />
+
+    <!-- Open Graph — WhatsApp'ta link önizlemesi için (§11). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={marka.ad} />
+    <meta property="og:title" content={sayfaBaslik} />
+    <meta property="og:description" content={sayfaAciklama} />
+    <meta property="og:url" content={kanonik} />
+    <meta property="og:locale" content={aktifDil} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <a href="#ana-icerik" class="skip-link">{t("a11y.anaIcerige")}</a>
+
+    <TopBar aktifDil={aktifDil} url={Astro.url} ayarlar={ayarlar} />
+    <Header aktifDil={aktifDil} />
+
+    <main id="ana-icerik" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer aktifDil={aktifDil} ayarlar={ayarlar} />
+    <WhatsAppButton aktifDil={aktifDil} ayarlar={ayarlar} />
+  </body>
+</html>
+
+<style>
+  /* "Ana içeriğe geç" — normalde gizli, klavye odağında görünür. */
+  .skip-link {
+    position: absolute;
+    inset-inline-start: 0.5rem;
+    top: -3rem;
+    z-index: 50;
+    background: var(--color-vurgu);
+    color: var(--color-kagit);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 0 4px 4px;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+</style>

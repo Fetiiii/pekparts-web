@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import IcerikSayfa from "@/components/IcerikSayfa.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { sanitySayfa } from "@/lib/sanity";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+const sayfa = await sanitySayfa("cerez-politikasi");
+---
+
+<Layout baslik={t("footer.cerez")}>
+  <IcerikSayfa aktifDil={aktifDil} varsayilanBaslik={t("footer.cerez")} sayfa={sayfa} />
+</Layout>

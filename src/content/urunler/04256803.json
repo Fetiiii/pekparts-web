@@ -1,0 +1,36 @@
+{
+  "parcaNo": "04256803",
+  "muadilNo": [
+    "4256803",
+    "0425 6803"
+  ],
+  "marka": "deutz",
+  "kategori": "conta-takimlari",
+  "uyumluMotorlar": [
+    "BF4M 2012",
+    "BF4M 2012 C",
+    "TCD 2012 L04"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 18900,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "04256803-1.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-02",
+  "ad": {
+    "tr": "Deutz üst takım conta",
+    "en": "Deutz upper gasket set",
+    "ar": "طقم جوانات علوي ديوتز",
+    "ru": "Верхний комплект прокладок Deutz"
+  },
+  "aciklama": {
+    "tr": "Silindir kapak contası, supap kapak contası ve manifold contalarını içerir.",
+    "en": "Includes head gasket, valve cover gasket and manifold gaskets."
+  }
+}

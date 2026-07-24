@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* ————————————————————————————————————————————————
+   Tasarım tokenları — Şartname §10
+   Renkler damgalanmış teknik katalog dilinden türetildi.
+   Bakır tonu conta/burç/yatak rengidir; keyfi değil.
+   ———————————————————————————————————————————————— */
+@theme {
+  --color-murekkep: #161a1d; /* ana metin, koyu yüzeyler */
+  --color-kagit: #fbfaf8; /* sayfa zemini */
+  --color-yuzey: #f1f0ed; /* kart zemini */
+  --color-vurgu: #12324b; /* derin mavi — bağlantı, birincil buton */
+  --color-bakir: #b26b2e; /* pirinç/bakır — parça no vurgusu, rozet */
+  --color-kenarlik: #dddcd7;
+
+  /* Bakırın koyu bir varyantı: bakır üstü beyaz metin AA'yı zor geçer;
+     metin/kenar için gerektiğinde bu daha koyu ton kullanılır. */
+  --color-bakir-koyu: #8f551f;
+
+  /* Tipografi — IBM Plex ailesi. Arapça glifleri için Plex Sans Arabic
+     yığına eklendi: Plex Sans'ta olmayan Arapça harfler ona düşer. */
+  --font-sans:
+    "IBM Plex Sans", "IBM Plex Sans Arabic", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, "SFMono-Regular", "Menlo", monospace;
+}
+
+/* ————————————————————————————————————————————————
+   Temel katman
+   ———————————————————————————————————————————————— */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-kagit);
+    color: var(--color-murekkep);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Görünür odak halkası — klavye gezintisi için pazarlık konusu değil. */
+  :focus-visible {
+    outline: 2px solid var(--color-vurgu);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  a {
+    color: var(--color-vurgu);
+    text-underline-offset: 2px;
+  }
+
+  /* Hareket duyarlılığı — animasyonları neredeyse sıfırla. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ————————————————————————————————————————————————
+   İmza öğe: parça numarası (Şartname §10)
+   Site boyunca tek tip, monospace, hafif harf aralıklı, damgalanmış.
+   ———————————————————————————————————————————————— */
+@utility parca-no {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  /* RTL'de bile parça numaraları soldan-sağa okunur (Latin/rakam). */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Ekran okuyucuya görünür, gözle gizli — "ana içeriğe geç" bağlantısı için. */
+@utility gorsel-gizli {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

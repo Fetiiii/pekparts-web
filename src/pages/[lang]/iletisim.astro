@@ -1,0 +1,75 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import TeklifForm from "@/components/TeklifForm.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { telLink, whatsappLink } from "@/site";
+import { getAyarlar } from "@/lib/ayarlar";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+const ayarlar = await getAyarlar();
+---
+
+<Layout baslik={t("nav.iletisim")}>
+  <section class="mx-auto max-w-6xl px-4 py-12">
+    <h1 class="text-2xl font-bold tracking-tight">{t("nav.iletisim")}</h1>
+
+    <div class="mt-8 grid gap-10 lg:grid-cols-2">
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">{t("iletisim.bilgiler")}</h2>
+        <dl class="divide-y divide-kenarlik border-y border-kenarlik text-sm">
+          <div class="flex gap-4 py-3">
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("ustbar.telefon")}</dt>
+            <dd><a href={telLink(ayarlar.telefon)} class="parca-no hover:underline">{ayarlar.telefon}</a></dd>
+          </div>
+          <div class="flex gap-4 py-3">
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("ustbar.whatsapp")}</dt>
+            <dd>
+              <a href={whatsappLink(ayarlar.whatsapp, t("whatsapp.mesaj"))} rel="noopener" class="hover:underline">
+                {t("whatsapp.acikla")}
+              </a>
+            </dd>
+          </div>
+          <div class="flex gap-4 py-3">
+            <dt class="w-32 shrink-0 text-murekkep/60">E-posta</dt>
+            <dd><a href={`mailto:${ayarlar.eposta}`} class="hover:underline">{ayarlar.eposta}</a></dd>
+          </div>
+          <div class="flex gap-4 py-3">
+            <dt class="w-32 shrink-0 text-murekkep/60">Adres</dt>
+            <dd class="text-murekkep/80">{ayarlar.adres}</dd>
+          </div>
+          <div class="flex gap-4 py-3">
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("nav.iletisim")}</dt>
+            <dd class="text-murekkep/80">{ayarlar.calismaSaatleri}</dd>
+          </div>
+        </dl>
+
+        {
+          ayarlar.haritaGomu && (
+            <div class="mt-6 aspect-video overflow-hidden rounded border border-kenarlik">
+              <iframe
+                src={ayarlar.haritaGomu}
+                title={t("iletisim.harita")}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                class="h-full w-full border-0"
+              />
+            </div>
+          )
+        }
+      </div>
+
+      <div>
+        <TeklifForm
+          aktifDil={aktifDil}
+          baslik={t("iletisim.formBaslik")}
+          aciklama={t("teklif.aciklama")}
+        />
+      </div>
+    </div>
+  </section>
+</Layout>

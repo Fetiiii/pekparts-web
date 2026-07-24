@@ -1,0 +1,22 @@
+{
+  "parcaNo": "U5MK8564",
+  "muadilNo": [],
+  "marka": "perkins",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "1104C-44",
+    "1103A-33"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 980,
+  "paraBirimi": "TRY",
+  "gorseller": [],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-18",
+  "ad": {
+    "tr": "Perkins yakıt filtresi",
+    "en": "Perkins fuel filter"
+  }
+}

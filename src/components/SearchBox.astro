@@ -1,0 +1,46 @@
+---
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+
+interface Props {
+  aktifDil: Dil;
+  buyuk?: boolean; // hero'daki büyük arama kutusu için
+}
+const { aktifDil, buyuk = false } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+// Fonksiyonel arama Aşama 2. Form şimdiden /ara yoluna GET yapıyor;
+// istemci tarafı arama o sayfada devreye girecek.
+const hedef = dilliYol(aktifDil, "ara");
+---
+
+<form
+  role="search"
+  action={hedef}
+  method="get"
+  class:list={["flex w-full items-stretch", buyuk ? "gap-2" : "gap-1.5"]}
+>
+  <label for={buyuk ? "ara-hero" : "ara-header"} class="gorsel-gizli">
+    {t("ara.etiket")}
+  </label>
+  <input
+    id={buyuk ? "ara-hero" : "ara-header"}
+    type="search"
+    name="s"
+    inputmode="search"
+    autocomplete="off"
+    placeholder={t("ara.placeholder")}
+    class:list={[
+      "parca-no min-w-0 flex-1 rounded border border-kenarlik bg-kagit text-murekkep placeholder:text-murekkep/45 focus:border-vurgu",
+      buyuk ? "px-4 py-3 text-base" : "px-3 py-2 text-sm",
+    ]}
+  />
+  <button
+    type="submit"
+    class:list={[
+      "shrink-0 rounded bg-vurgu font-medium text-kagit hover:bg-vurgu/90",
+      buyuk ? "px-5 py-3 text-base" : "px-3 py-2 text-sm",
+    ]}
+  >
+    {t("ara.buton")}
+  </button>
+</form>

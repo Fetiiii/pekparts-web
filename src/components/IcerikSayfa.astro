@@ -1,0 +1,37 @@
+---
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { yerelDeger } from "@/lib/katalog";
+import type { SayfaIcerik } from "@/lib/sanity";
+
+interface Props {
+  aktifDil: Dil;
+  varsayilanBaslik: string;
+  sayfa: SayfaIcerik | null;
+}
+const { aktifDil, varsayilanBaslik, sayfa } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+const baslik = yerelDeger(sayfa?.baslik, aktifDil) || varsayilanBaslik;
+const govde = yerelDeger(sayfa?.icerik, aktifDil).trim();
+const paragraflar = govde ? govde.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean) : [];
+---
+
+<section class="mx-auto max-w-3xl px-4 py-12">
+  <h1 class="text-2xl font-bold tracking-tight">{baslik}</h1>
+
+  {
+    paragraflar.length > 0 ? (
+      <div class="mt-6 space-y-4 text-murekkep/85">
+        {paragraflar.map((p) => (
+          <p>{p}</p>
+        ))}
+      </div>
+    ) : (
+      /* Yer tutucu — CMS'te doldurulmadı. Metin işaretlidir; canlıya sızarsa
+         seed-guard yakalar (CANLI=1'de derleme durur). */
+      <p class="mt-6 rounded border border-kenarlik bg-yuzey p-6 text-murekkep/70">
+        {t("genel.todo")}
+      </p>
+    )
+  }
+</section>

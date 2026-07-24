@@ -1,0 +1,112 @@
+---
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+
+interface Props {
+  aktifDil: Dil;
+  parcaNo?: string;
+  urunAd?: string;
+  baslik?: string;
+  aciklama?: string;
+}
+const { aktifDil, parcaNo = "", urunAd = "", baslik, aciklama } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+// Gönderim Netlify Function'a gider (host-nötr çekirdek). Parça no/ürün adı gizli
+// alanlarda; honeypot + KVKK yerinde. JS'siz de çalışır (fonksiyon HTML onay döner).
+const ENDPOINT = "/.netlify/functions/teklif";
+const girisSinif =
+  "w-full rounded border border-kenarlik bg-kagit px-3 py-2 text-sm focus:border-vurgu";
+---
+
+<section
+  id="teklif"
+  data-teklif-kok
+  class="rounded border border-kenarlik bg-yuzey p-5 sm:p-6"
+  aria-labelledby="teklif-baslik"
+>
+  <h2 id="teklif-baslik" class="text-lg font-semibold">{baslik ?? t("teklif.baslik")}</h2>
+  <p class="mt-1 text-sm text-murekkep/70">{aciklama ?? t("teklif.aciklama")}</p>
+
+  <form
+    data-teklif
+    action={ENDPOINT}
+    method="post"
+    class="mt-4 grid gap-4 sm:grid-cols-2"
+  >
+    <input type="hidden" name="parcaNo" value={parcaNo} />
+    <input type="hidden" name="urunAd" value={urunAd} />
+    <input type="hidden" name="dil" value={aktifDil} />
+
+    <!-- Honeypot: gerçek kullanıcı görmez/doldurmaz; bot doldurursa elenir -->
+    <div class="gorsel-gizli" aria-hidden="true">
+      <label>
+        Web sitesi
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
+
+    <div>
+      <label for="tf-ad" class="mb-1 block text-sm font-medium">
+        {t("form.ad")} <span class="text-bakir-koyu" aria-hidden="true">*</span>
+      </label>
+      <input id="tf-ad" name="ad" type="text" required autocomplete="name" class={girisSinif} />
+    </div>
+
+    <div>
+      <label for="tf-iletisim" class="mb-1 block text-sm font-medium">
+        {t("form.iletisim")} <span class="text-bakir-koyu" aria-hidden="true">*</span>
+      </label>
+      <input id="tf-iletisim" name="iletisim" type="text" required class={girisSinif} />
+    </div>
+
+    <div>
+      <label for="tf-adet" class="mb-1 block text-sm font-medium">{t("form.adet")}</label>
+      <input id="tf-adet" name="adet" type="number" min="1" value="1" inputmode="numeric" class={girisSinif} />
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="tf-mesaj" class="mb-1 block text-sm font-medium">{t("form.mesaj")}</label>
+      <textarea id="tf-mesaj" name="mesaj" rows="3" class={girisSinif}></textarea>
+    </div>
+
+    <div class="sm:col-span-2">
+      <label class="flex items-start gap-2 text-sm">
+        <input type="checkbox" name="kvkk" required class="mt-0.5 size-4 shrink-0 accent-[var(--color-vurgu)]" />
+        <span>
+          {t("form.kvkkOnay")}
+          <a href={dilliYol(aktifDil, "kvkk")} class="underline">{t("form.kvkkBaglanti")}</a>
+        </span>
+      </label>
+    </div>
+
+    <div class="sm:col-span-2">
+      <button
+        type="submit"
+        data-gonder
+        data-metin={t("form.gonder")}
+        data-gonderiliyor={t("form.gonderiliyor")}
+        class="rounded bg-vurgu px-5 py-2.5 text-sm font-medium text-kagit hover:bg-vurgu/90 disabled:opacity-60"
+      >
+        {t("form.gonder")}
+      </button>
+      <p
+        data-hata
+        hidden
+        role="alert"
+        class="mt-3 rounded border border-bakir bg-kagit p-3 text-sm text-murekkep"
+      >
+        {t("teklif.hata")}
+      </p>
+    </div>
+  </form>
+
+  <!-- Başarı ekranı — JS ile form gizlenip bu gösterilir (§9) -->
+  <div data-basari hidden role="status" class="rounded border border-kenarlik bg-kagit p-6 text-center">
+    <p class="text-lg font-semibold">{t("teklif.onayBaslik")}</p>
+    <p class="mt-2 text-murekkep/75">{t("teklif.onayMetin")}</p>
+  </div>
+</section>
+
+<script>
+  import "@/scripts/teklif.ts";
+</script>

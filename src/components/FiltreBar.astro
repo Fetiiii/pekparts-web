@@ -1,0 +1,96 @@
+---
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { yerelDeger, type ZenginUrun } from "@/lib/katalog";
+
+interface Props {
+  aktifDil: Dil;
+  urunler: ZenginUrun[];
+  goster: ("kategori" | "marka" | "motor" | "stok")[];
+}
+const { aktifDil, urunler, goster } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+// Seçenekleri gösterilen ürün kümesinden türet — her zaman gerçekten var olan
+// değerler (boş filtre grubu olmaz).
+function benzersiz<T>(dizi: T[], anahtar: (x: T) => string) {
+  const m = new Map<string, T>();
+  for (const x of dizi) if (!m.has(anahtar(x))) m.set(anahtar(x), x);
+  return [...m.values()];
+}
+
+const kategoriSecenek = benzersiz(
+  urunler.map((u) => ({ deger: u.kategoriSlug, etiket: yerelDeger(u.kategoriAd, aktifDil) })),
+  (x) => x.deger,
+).sort((a, b) => a.etiket.localeCompare(b.etiket, aktifDil));
+
+const markaSecenek = benzersiz(
+  urunler.map((u) => ({ deger: u.markaSlug, etiket: u.markaAd })),
+  (x) => x.deger,
+).sort((a, b) => a.etiket.localeCompare(b.etiket, aktifDil));
+
+const motorSecenek = benzersiz(
+  urunler.flatMap((u) => u.motorlar).map((m) => ({ deger: m.slug, etiket: m.ad })),
+  (x) => x.deger,
+).sort((a, b) => a.etiket.localeCompare(b.etiket, aktifDil));
+
+const stokSecenek = (["stokta", "siparise-bagli", "tukendi"] as const)
+  .filter((s) => urunler.some((u) => u.stokDurumu === s))
+  .map((s) => ({ deger: s, etiket: t(`stok.${s}`) }));
+
+const gruplar = [
+  { tur: "kategori", etiket: t("filtre.kategori"), secenekler: kategoriSecenek },
+  { tur: "marka", etiket: t("filtre.marka"), secenekler: markaSecenek },
+  { tur: "motor", etiket: t("filtre.motor"), secenekler: motorSecenek },
+  { tur: "stok", etiket: t("filtre.stok"), secenekler: stokSecenek },
+].filter((g) => goster.includes(g.tur as any) && g.secenekler.length > 1);
+---
+
+{
+  gruplar.length > 0 && (
+    <details open class="filtre mb-6 rounded border border-kenarlik bg-yuzey">
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 font-semibold">
+        <span>{t("filtre.baslik")}</span>
+        <span aria-hidden="true" class="text-xs">▾</span>
+      </summary>
+      <form data-filtre class="border-t border-kenarlik px-4 py-4">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {gruplar.map((grup) => (
+            <fieldset>
+              <legend class="mb-2 text-sm font-semibold">{grup.etiket}</legend>
+              <ul class="max-h-56 space-y-1.5 overflow-y-auto">
+                {grup.secenekler.map((sec) => (
+                  <li>
+                    <label class="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        data-grup={grup.tur}
+                        value={sec.deger}
+                        class="size-4 shrink-0 accent-[var(--color-vurgu)]"
+                      />
+                      <span class={grup.tur === "motor" ? "parca-no" : ""}>{sec.etiket}</span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+          ))}
+        </div>
+        <div class="mt-4 border-t border-kenarlik pt-3">
+          <button
+            type="button"
+            data-temizle
+            class="text-sm font-medium text-vurgu hover:underline"
+          >
+            {t("filtre.temizle")}
+          </button>
+        </div>
+      </form>
+    </details>
+  )
+}
+
+<style>
+  .filtre summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

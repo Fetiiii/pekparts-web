@@ -1,0 +1,58 @@
+---
+import { dilAdlari, diller, type Dil } from "@/i18n/ui";
+import { ceviriYap, yolunGerisi } from "@/i18n/utils";
+
+interface Props {
+  aktifDil: Dil;
+  url: URL;
+}
+const { aktifDil, url } = Astro.props;
+const t = ceviriYap(aktifDil);
+const kalan = yolunGerisi(url); // dil öneki soyulmuş yol
+
+// Dil adları endonim ve tek yönlü okunur; bayrak YOK (Şartname §7).
+---
+
+<details class="lang-switcher relative">
+  <summary
+    class="flex cursor-pointer list-none items-center gap-1 rounded px-2 py-1 text-sm hover:bg-yuzey"
+    aria-label={t("dil.sec")}
+  >
+    <span>{dilAdlari[aktifDil]}</span>
+    <span aria-hidden="true" class="text-xs">▾</span>
+  </summary>
+  <ul
+    class="absolute end-0 z-20 mt-1 min-w-40 rounded border border-kenarlik bg-kagit py-1 shadow-none"
+    role="list"
+  >
+    {
+      diller.map((d) => {
+        const hedef = kalan ? `/${d}/${kalan}` : `/${d}/`;
+        const secili = d === aktifDil;
+        return (
+          <li>
+            <a
+              href={hedef}
+              hreflang={d}
+              lang={d}
+              aria-current={secili ? "true" : undefined}
+              class:list={[
+                "block px-3 py-1.5 text-sm hover:bg-yuzey",
+                secili && "font-semibold text-vurgu",
+              ]}
+            >
+              {dilAdlari[d]}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</details>
+
+<style>
+  /* Varsayılan disclosure okunu gizle (kendi ▾ işaretimiz var). */
+  .lang-switcher summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

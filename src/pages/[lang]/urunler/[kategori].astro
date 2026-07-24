@@ -1,0 +1,32 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import UrunListe from "@/components/UrunListe.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { tumUrunler, yerelDeger } from "@/lib/katalog";
+
+export async function getStaticPaths() {
+  const urunler = await tumUrunler();
+  const kategoriler = [...new Set(urunler.map((u) => u.kategoriSlug))];
+  return diller.flatMap((lang) =>
+    kategoriler.map((kategori) => ({ params: { lang, kategori } })),
+  );
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const { kategori } = Astro.params;
+const t = ceviriYap(aktifDil);
+
+const urunler = (await tumUrunler()).filter((u) => u.kategoriSlug === kategori);
+const baslik = yerelDeger(urunler[0]?.kategoriAd, aktifDil) || kategori!;
+---
+
+<Layout baslik={baslik}>
+  <UrunListe
+    aktifDil={aktifDil}
+    baslik={baslik}
+    ustBaslik={t("filtre.kategori")}
+    urunler={urunler}
+    goster={["marka", "motor", "stok"]}
+  />
+</Layout>

@@ -1,0 +1,11 @@
+{
+  "slug": "filtreler",
+  "sira": 2,
+  "ikon": "filter",
+  "ad": {
+    "tr": "Filtreler",
+    "en": "Filters",
+    "ar": "الفلاتر",
+    "ru": "Фильтры"
+  }
+}

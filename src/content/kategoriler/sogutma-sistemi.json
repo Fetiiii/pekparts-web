@@ -1,0 +1,11 @@
+{
+  "slug": "sogutma-sistemi",
+  "sira": 5,
+  "ikon": "temperature",
+  "ad": {
+    "tr": "Soğutma sistemi",
+    "en": "Cooling system",
+    "ar": "نظام التبريد",
+    "ru": "Система охлаждения"
+  }
+}

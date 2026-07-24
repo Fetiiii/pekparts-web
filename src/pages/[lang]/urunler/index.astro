@@ -1,0 +1,19 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import UrunListe from "@/components/UrunListe.astro";
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { tumUrunler } from "@/lib/katalog";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+const urunler = await tumUrunler();
+---
+
+<Layout baslik={t("liste.tumUrunler")}>
+  <UrunListe aktifDil={aktifDil} baslik={t("liste.tumUrunler")} urunler={urunler} />
+</Layout>

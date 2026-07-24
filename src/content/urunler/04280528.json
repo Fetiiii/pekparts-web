@@ -1,0 +1,23 @@
+{
+  "parcaNo": "04280528",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "motor-parcalari",
+  "uyumluMotorlar": [],
+  "stokDurumu": "stokta",
+  "durum": "orijinal",
+  "fiyat": 12750,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "04280528-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-05-08",
+  "ad": {
+    "tr": "Deutz hidrolik pompa kaplini",
+    "en": "Deutz clutch sleeve"
+  }
+}

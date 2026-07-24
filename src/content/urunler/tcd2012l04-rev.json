@@ -1,0 +1,34 @@
+{
+  "parcaNo": "TCD2012L04-REV",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "komple-motorlar",
+  "uyumluMotorlar": [
+    "TCD 2012 L04"
+  ],
+  "stokDurumu": "siparise-bagli",
+  "durum": "revizyonlu",
+  "fiyat": 18500,
+  "paraBirimi": "USD",
+  "gorseller": [
+    {
+      "dosya": "tcd2012l04-1.jpg"
+    },
+    {
+      "dosya": "tcd2012l04-2.jpg"
+    },
+    {
+      "dosya": "tcd2012l04-3.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-30",
+  "ad": {
+    "tr": "Deutz TCD 2012 L04 revizyonlu komple motor — test edilmiş, garantili, montaja hazır teslim",
+    "en": "Deutz TCD 2012 L04 remanufactured complete engine — tested, warranted, ready for installation"
+  },
+  "aciklama": {
+    "tr": "Tam revizyondan geçmiş, test edilmiş komple motor. 6 ay garantilidir."
+  }
+}

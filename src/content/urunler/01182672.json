@@ -1,0 +1,34 @@
+{
+  "parcaNo": "01182672",
+  "muadilNo": [
+    "1182672"
+  ],
+  "marka": "deutz",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "BF4M 1013",
+    "BF6M 1013",
+    "TCD 2013 L04",
+    "TCD 2013 L06",
+    "BF4M 2012",
+    "BF6M 2012"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 1450,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "01182672-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-06-11",
+  "ad": {
+    "tr": "Deutz yağ filtresi",
+    "en": "Deutz oil filter",
+    "ar": "فلتر زيت ديوتز",
+    "ru": "Масляный фильтр Deutz"
+  }
+}

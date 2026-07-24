@@ -1,0 +1,112 @@
+---
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { marka } from "@/site";
+import SearchBox from "./SearchBox.astro";
+
+interface Props {
+  aktifDil: Dil;
+}
+const { aktifDil } = Astro.props;
+const t = ceviriYap(aktifDil);
+
+const menu = [
+  { yol: "", etiket: t("nav.anasayfa") },
+  { yol: "urunler", etiket: t("nav.urunler") },
+  { yol: "markalar", etiket: t("nav.markalar") },
+  { yol: "hakkimizda", etiket: t("nav.hakkimizda") },
+  { yol: "iletisim", etiket: t("nav.iletisim") },
+];
+---
+
+<header class="border-b border-kenarlik bg-kagit">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="relative flex items-center justify-between gap-4 py-3">
+      <!-- Logo: metin. Vektörel logo (SVG) firmadan gelince buraya girer (§15). -->
+      <a
+        href={dilliYol(aktifDil)}
+        class="flex shrink-0 items-baseline gap-2 text-murekkep no-underline"
+      >
+        <span class="text-xl font-bold tracking-tight">{marka.ad}</span>
+        <span class="hidden text-xs text-murekkep/60 sm:inline">
+          {marka.unvan}
+        </span>
+      </a>
+
+      <!-- Masaüstü arama -->
+      <div class="hidden max-w-md flex-1 md:block">
+        <SearchBox aktifDil={aktifDil} />
+      </div>
+
+      <!-- Masaüstü menü -->
+      <nav aria-label={t("nav.anasayfa")} class="hidden md:block">
+        <ul class="flex items-center gap-5 text-sm">
+          {
+            menu.map((m) => (
+              <li>
+                <a
+                  href={dilliYol(aktifDil, m.yol)}
+                  class="text-murekkep no-underline hover:text-vurgu"
+                >
+                  {m.etiket}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Mobil menü açacı: JS'siz, erişilebilir <details> -->
+      <details class="mobil-menu md:hidden">
+        <summary
+          class="flex cursor-pointer list-none items-center rounded border border-kenarlik p-2"
+          aria-label={t("a11y.menuAc")}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </summary>
+        <div
+          class="absolute start-0 end-0 top-full z-30 border-y border-kenarlik bg-kagit px-4 py-4"
+        >
+          <div>
+            <div class="mb-4">
+              <SearchBox aktifDil={aktifDil} />
+            </div>
+            <nav aria-label={t("nav.anasayfa")}>
+              <ul class="flex flex-col gap-1">
+                {
+                  menu.map((m) => (
+                    <li>
+                      <a
+                        href={dilliYol(aktifDil, m.yol)}
+                        class="block rounded px-2 py-2 text-murekkep no-underline hover:bg-yuzey"
+                      >
+                        {m.etiket}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .mobil-menu summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

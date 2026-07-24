@@ -1,0 +1,31 @@
+{
+  "parcaNo": "3802429",
+  "muadilNo": [
+    "380 2429",
+    "3802429NX"
+  ],
+  "marka": "cummins",
+  "kategori": "conta-takimlari",
+  "uyumluMotorlar": [
+    "6BT 5.9",
+    "6BTA 5.9"
+  ],
+  "stokDurumu": "stokta",
+  "durum": "muadil",
+  "fiyat": 15600,
+  "paraBirimi": "TRY",
+  "gorseller": [
+    {
+      "dosya": "3802429-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "eklenmeTarihi": "2026-07-01",
+  "ad": {
+    "tr": "Cummins alt takım conta",
+    "en": "Cummins lower gasket set",
+    "ar": "طقم جوانات سفلي كمنز",
+    "ru": "Нижний комплект прокладок Cummins"
+  }
+}

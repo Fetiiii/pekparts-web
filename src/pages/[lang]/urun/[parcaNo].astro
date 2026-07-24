@@ -1,0 +1,186 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Rozet from "@/components/Rozet.astro";
+import TeklifForm from "@/components/TeklifForm.astro";
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { tumUrunler, yerelDeger } from "@/lib/katalog";
+
+export async function getStaticPaths() {
+  const urunler = await tumUrunler();
+  return diller.flatMap((lang) =>
+    urunler.map((u) => ({ params: { lang, parcaNo: u.slug } })),
+  );
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const { parcaNo } = Astro.params;
+const t = ceviriYap(aktifDil);
+
+const urunler = await tumUrunler();
+const urun = urunler.find((u) => u.slug === parcaNo);
+if (!urun) return Astro.rewrite("/404");
+
+const ad = yerelDeger(urun.ad, aktifDil);
+const aciklama = yerelDeger(urun.aciklama, aktifDil);
+const kategoriAd = yerelDeger(urun.kategoriAd, aktifDil);
+
+// Görseller: adaptörde çözülmüş URL'ler; yoksa yer tutucu.
+const gorseller = urun.gorseller
+  .filter((g) => g.url)
+  .map((g) => ({
+    yol: g.url!,
+    alt: g.alt ? yerelDeger(g.alt, aktifDil) : t("urun.gorselAcilim", { ad, no: urun.parcaNo }),
+  }));
+
+// schema.org Product — fiyat YOK (§5); availability + itemCondition + marka.
+const stokHarita: Record<string, string> = {
+  stokta: "https://schema.org/InStock",
+  "siparise-bagli": "https://schema.org/PreOrder",
+  tukendi: "https://schema.org/OutOfStock",
+};
+const durumHarita: Record<string, string> = {
+  orijinal: "https://schema.org/NewCondition",
+  muadil: "https://schema.org/NewCondition",
+  revizyonlu: "https://schema.org/RefurbishedCondition",
+};
+const kanonik = new URL(dilliYol(aktifDil, `urun/${urun.slug}`), Astro.site).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: ad,
+  sku: urun.parcaNo,
+  mpn: urun.parcaNo,
+  brand: { "@type": "Brand", name: urun.markaAd },
+  category: kategoriAd,
+  ...(gorseller.length
+    ? { image: gorseller.map((g) => new URL(g.yol, Astro.site).href) }
+    : {}),
+  offers: {
+    "@type": "Offer",
+    availability: stokHarita[urun.stokDurumu],
+    itemCondition: durumHarita[urun.durum],
+    url: kanonik,
+  },
+};
+---
+
+<Layout baslik={`${urun.parcaNo} · ${ad}`} aciklama={aciklama || undefined}>
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <!-- Kırıntı -->
+    <nav aria-label="breadcrumb" class="mb-6 text-sm text-murekkep/60">
+      <ol class="flex flex-wrap items-center gap-1.5">
+        <li><a href={dilliYol(aktifDil, "urunler")} class="hover:underline">{t("liste.tumUrunler")}</a></li>
+        <li aria-hidden="true">/</li>
+        <li>
+          <a href={dilliYol(aktifDil, `urunler/${urun.kategoriSlug}`)} class="hover:underline">{kategoriAd}</a>
+        </li>
+        <li aria-hidden="true">/</li>
+        <li class="parca-no text-murekkep/80">{urun.parcaNo}</li>
+      </ol>
+    </nav>
+
+    <div class="grid gap-8 lg:grid-cols-2">
+      <!-- Galeri -->
+      <div>
+        {
+          gorseller.length > 0 ? (
+            <div class="space-y-3">
+              <div class="aspect-4/3 overflow-hidden rounded border border-kenarlik bg-yuzey">
+                <img src={gorseller[0].yol} alt={gorseller[0].alt} class="h-full w-full object-cover" />
+              </div>
+              {gorseller.length > 1 && (
+                <ul class="grid grid-cols-4 gap-2">
+                  {gorseller.map((g) => (
+                    <li class="aspect-square overflow-hidden rounded border border-kenarlik bg-yuzey">
+                      <img src={g.yol} alt={g.alt} loading="lazy" class="h-full w-full object-cover" />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ) : (
+            <div class="flex aspect-4/3 flex-col items-center justify-center gap-2 rounded border border-kenarlik bg-yuzey text-murekkep/40">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v10M7 12h10" />
+              </svg>
+              <span class="text-sm">{t("urun.gorselYok")}</span>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Bilgi -->
+      <div>
+        <p class="parca-no text-lg font-semibold text-bakir-koyu">{urun.parcaNo}</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight">{ad}</h1>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+          <Rozet tip="durum" deger={urun.durum} aktifDil={aktifDil} />
+          <Rozet tip="stok" deger={urun.stokDurumu} aktifDil={aktifDil} />
+        </div>
+
+        {aciklama && <p class="mt-4 text-murekkep/80">{aciklama}</p>}
+
+        <!-- Teknik tablo -->
+        <dl class="mt-6 divide-y divide-kenarlik border-y border-kenarlik text-sm">
+          <div class="flex gap-4 py-2.5">
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("urun.marka")}</dt>
+            <dd>
+              <a href={dilliYol(aktifDil, `marka/${urun.markaSlug}`)} class="hover:underline">{urun.markaAd}</a>
+            </dd>
+          </div>
+          <div class="flex gap-4 py-2.5">
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("urun.kategori")}</dt>
+            <dd>
+              <a href={dilliYol(aktifDil, `urunler/${urun.kategoriSlug}`)} class="hover:underline">{kategoriAd}</a>
+            </dd>
+          </div>
+          {
+            urun.muadilNo.length > 0 && (
+              <div class="flex gap-4 py-2.5">
+                <dt class="w-32 shrink-0 text-murekkep/60">{t("urun.muadilNo")}</dt>
+                <dd class="parca-no">{urun.muadilNo.join(" · ")}</dd>
+              </div>
+            )
+          }
+        </dl>
+
+        <!-- Uyumlu motorlar: tıklanabilir → /marka/[marka]/[motor] -->
+        {
+          urun.motorlar.length > 0 && (
+            <div class="mt-6">
+              <h2 class="mb-2 text-sm font-semibold">{t("urun.uyumluMotorlar")}</h2>
+              <ul class="flex flex-wrap gap-2">
+                {urun.motorlar.map((m) => (
+                  <li>
+                    <a
+                      href={dilliYol(aktifDil, `marka/${urun.markaSlug}/${m.slug}`)}
+                      class="parca-no inline-block rounded border border-kenarlik bg-yuzey px-2.5 py-1 text-xs text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
+                    >
+                      {m.ad}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        <div class="mt-6">
+          <a href="#teklif" class="inline-block rounded bg-vurgu px-5 py-2.5 text-sm font-medium text-kagit no-underline hover:bg-vurgu/90">
+            {t("urun.fiyatSor")}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teklif formu -->
+    <div class="mt-10 max-w-2xl">
+      <TeklifForm aktifDil={aktifDil} parcaNo={urun.parcaNo} urunAd={ad} />
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>
