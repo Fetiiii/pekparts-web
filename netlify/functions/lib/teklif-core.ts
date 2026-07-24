@@ -59,7 +59,7 @@ export async function teklifIsle(veri: TeklifVeri, config: TeklifConfig): Promis
   if (!ad || !iletisim) return { ok: false, status: 400, kod: "eksik" };
 
   // 4) Oran sınırlama
-  // if (config.ip && oranAsildi(config.ip)) return { ok: false, status: 429, kod: "oran" };
+  if (config.ip && oranAsildi(config.ip)) return { ok: false, status: 429, kod: "oran" };
 
   const parcaNo = (veri.parcaNo ?? "").toString().trim();
   const urunAd = (veri.urunAd ?? "").toString().trim();
