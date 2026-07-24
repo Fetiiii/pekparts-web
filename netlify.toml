@@ -8,6 +8,13 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+
+[[headers]]
+  for = "/*"
+
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Sanity webhook → yeniden derleme: Netlify'da "Build hooks" ile oluşturulan
 # URL, Sanity proje ayarlarında (API → Webhooks) POST hedefi olarak tanımlanır.
 # Böylece panelde kaydedilen değişiklik birkaç dakika içinde siteye yansır.

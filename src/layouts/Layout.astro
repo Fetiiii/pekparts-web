@@ -66,6 +66,10 @@ const kanonik = altUrl(aktifDil);
     <meta property="og:locale" content={aktifDil} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    
+    {import.meta.env.PUBLIC_SITE_INDEXABLE !== "true" && (
+    <meta name="robots" content="noindex, nofollow" />
+    )}
   </head>
 
   <body class="flex min-h-screen flex-col">
