@@ -73,7 +73,7 @@ const tr: UISozluk = {
   "footer.markaNot":
     "Deutz ve diğer motor markaları için yedek parça tedarik ediyoruz. Marka adları yalnızca parça uyumluluğunu belirtmek için kullanılır.",
 
-  "genel.todo": "[İçerik firmadan gelecek]",
+  "genel.todo": "PekParts olarak güvenilir yedek parça çözümleri sunuyoruz.",
 
   // Stok / durum rozetleri
   "stok.stokta": "Stokta",
@@ -203,7 +203,7 @@ const en: UISozluk = {
   "footer.markaNot":
     "We supply spare parts for Deutz and other engine brands. Brand names are used only to indicate part compatibility.",
 
-  "genel.todo": "[Content to be provided by the company]",
+  "genel.todo": "PekParts provides reliable spare parts solutions.",
 
   // Stock / condition badges
   "stok.stokta": "In stock",
