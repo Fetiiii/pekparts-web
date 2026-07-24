@@ -1,0 +1,28 @@
+{
+  "parcaNo": "02230975",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "pompalar",
+  "uyumluMotorlar": [
+    "BF6M 1013",
+    "TCD 2013 L06"
+  ],
+  "stokDurumu": "siparise-bagli",
+  "gorseller": [
+    {
+      "dosya": "02230975-1.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "ad": {
+    "tr": "Deutz yağ pompası",
+    "en": "Deutz oil pump",
+    "ar": "مضخة زيت ديوتز",
+    "ru": "Масляный насос Deutz"
+  },
+  "aciklama": {
+    "tr": "Stokta bulunmadığında 5-7 iş günü içinde tedarik edilir.",
+    "en": "Supplied within 5-7 business days when not in stock."
+  }
+}

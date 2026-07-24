@@ -2,16 +2,15 @@ import { defineCollection, reference } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "zod";
 
-// Astro 7 Content Layer: koleksiyonlar glob() loader ile tanımlanır.
-// Şema özü (zod alanları, cevrilebilir(), reference(), aramaAnahtari())
-// verildiği gibi korunmuştur; yalnızca koleksiyon sarmalı loader kullanır.
-// Sanity'ye taşınırken bu zod şeması referans alınır.
+// Astro 7 Content Layer. Şema özü kök config.ts ile BİREBİR tutulur; ayrışırsa
+// Sanity aktarımı bozulur. Sanity'ye taşınırken bu zod şeması referans alınır.
 
 export const DILLER = ["tr", "en", "ar", "ru"] as const;
 export type Dil = (typeof DILLER)[number];
 
 export const RTL_DILLER: Dil[] = ["ar"];
 
+// Çevrilebilir alan (tr zorunlu, diğer diller opsiyonel)
 const cevrilebilir = <T extends z.ZodType>(sema: T) =>
   z.object({
     tr: sema,
@@ -33,14 +32,10 @@ const urunler = defineCollection({
     marka: reference("markalar"),
     kategori: reference("kategoriler"),
     uyumluMotorlar: z.array(z.string()).default([]),
-    stokDurumu: z.enum(["stokta", "siparise-bagli", "tukendi"]),
-    durum: z.enum(["orijinal", "muadil", "revizyonlu"]),
-    fiyat: z.number().positive().optional(),
-    paraBirimi: z.enum(["TRY", "USD", "EUR"]).optional(),
+    stokDurumu: z.enum(["stokta", "siparise-bagli", "tukendi"]).default("stokta"),
     gorseller: z.array(gorsel).default([]),
     oneCikan: z.boolean().default(false),
     yayinda: z.boolean().default(true),
-    eklenmeTarihi: z.coerce.date(),
     ad: cevrilebilir(z.string().min(1)),
     aciklama: cevrilebilir(z.string()).optional(),
   }),

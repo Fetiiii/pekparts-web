@@ -1,0 +1,21 @@
+{
+  "parcaNo": "04286036",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "diger",
+  "uyumluMotorlar": [
+    "TCD 2013 L04"
+  ],
+  "stokDurumu": "stokta",
+  "gorseller": [
+    {
+      "dosya": "04286036-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "ad": {
+    "tr": "Deutz adaptör",
+    "en": "Deutz bracket"
+  }
+}

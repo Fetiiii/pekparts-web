@@ -17,8 +17,10 @@ export function sanityYapili(): boolean {
   return !!projectId;
 }
 
+// useCdn: false — build anında hep TAZE veri. CDN önbelleği yazımdan sonra
+// bayat kalabiliyor; build (SSG) az sayıda sorgu yaptığı için CDN'e gerek yok.
 export const sanityClient: SanityClient | null = projectId
-  ? createClient({ projectId, dataset, apiVersion: "2024-01-01", useCdn: true })
+  ? createClient({ projectId, dataset, apiVersion: "2024-01-01", useCdn: false })
   : null;
 
 const builder = sanityClient ? imageUrlBuilder(sanityClient) : null;
@@ -38,26 +40,25 @@ const URUN_SORGU = `*[_type=="urun" && yayinda==true]{
   parcaNo, muadilNo,
   "markaSlug": marka->slug.current, "markaAd": marka->ad,
   "kategoriSlug": kategori->slug.current, "kategoriAd": kategori->ad,
-  uyumluMotorlar, stokDurumu, durum, oneCikan,
+  uyumluMotorlar, stokDurumu, oneCikan,
   gorseller[]{ "asset": asset, alt },
-  ad, aciklama, eklenmeTarihi
+  ad, aciklama
 }`;
 
 export async function sanityUrunler(): Promise<ZenginUrun[]> {
   if (!sanityClient) throw new Error("Sanity istemcisi yok");
   const ham = await sanityClient.fetch<any[]>(URUN_SORGU);
   return ham.map((u): ZenginUrun => ({
-    id: slugla(u.parcaNo),
+    id: u.id, // Sanity _id — benzersiz/kararlı (aynı parça no'lu farklı ürünler için)
     parcaNo: u.parcaNo,
-    slug: slugla(u.parcaNo),
+    slug: slugla(u.parcaNo), // geçici; katalog.ts benzersizleştirir (çakışmada -2/-3)
     muadilNo: u.muadilNo ?? [],
     markaSlug: u.markaSlug ?? "",
     markaAd: u.markaAd ?? u.markaSlug ?? "",
     kategoriSlug: u.kategoriSlug ?? "",
     kategoriAd: u.kategoriAd ?? { tr: u.kategoriSlug ?? "" },
     motorlar: (u.uyumluMotorlar ?? []).map((ad: string) => ({ ad, slug: slugla(ad) })),
-    stokDurumu: u.stokDurumu,
-    durum: u.durum,
+    stokDurumu: u.stokDurumu ?? "stokta",
     oneCikan: !!u.oneCikan,
     gorseller: (u.gorseller ?? []).map((g: any) => ({
       url: gorselUrl(g.asset),
@@ -65,7 +66,6 @@ export async function sanityUrunler(): Promise<ZenginUrun[]> {
     })),
     ad: u.ad ?? { tr: u.parcaNo },
     aciklama: u.aciklama,
-    eklenmeTarihi: new Date(u.eklenmeTarihi ?? Date.now()),
   }));
 }
 

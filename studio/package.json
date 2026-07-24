@@ -11,13 +11,15 @@
     "test:excel": "node --experimental-strip-types lib/urun-excel.test.ts"
   },
   "dependencies": {
+    "@sanity/client": "^7.25.0",
     "@sanity/ui": "^2",
     "@sanity/vision": "^3",
     "exceljs": "^4.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sanity": "^3",
-    "styled-components": "^6"
+    "styled-components": "^6",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18",

@@ -67,43 +67,8 @@ export const urunTipi = defineType({
         ],
         layout: "radio",
       },
+      initialValue: "stokta",
       validation: (r) => r.required().error("Stok durumu zorunlu"),
-    }),
-    defineField({
-      name: "durum",
-      title: "Durum",
-      type: "string",
-      group: "genel",
-      options: {
-        list: [
-          { title: "Orijinal", value: "orijinal" },
-          { title: "Muadil", value: "muadil" },
-          { title: "Revizyonlu", value: "revizyonlu" },
-        ],
-        layout: "radio",
-      },
-      validation: (r) => r.required().error("Durum zorunlu"),
-    }),
-    defineField({
-      name: "fiyat",
-      title: "Fiyat",
-      type: "number",
-      group: "genel",
-      description: "Sitede GÖSTERİLMEZ. Panelde saklanır, ileride bayi girişi için hazır.",
-      validation: (r) => r.positive().error("Fiyat pozitif olmalı"),
-    }),
-    defineField({
-      name: "paraBirimi",
-      title: "Para Birimi",
-      type: "string",
-      group: "genel",
-      options: {
-        list: [
-          { title: "TRY", value: "TRY" },
-          { title: "USD", value: "USD" },
-          { title: "EUR", value: "EUR" },
-        ],
-      },
     }),
     defineField({
       name: "oneCikan",
@@ -120,15 +85,6 @@ export const urunTipi = defineType({
       group: "genel",
       initialValue: true,
       description: "Kapalıysa ürün sitede görünmez.",
-    }),
-    defineField({
-      name: "eklenmeTarihi",
-      title: "Eklenme Tarihi",
-      type: "date",
-      group: "genel",
-      options: { dateFormat: "DD.MM.YYYY" },
-      initialValue: () => new Date().toISOString().slice(0, 10),
-      validation: (r) => r.required(),
     }),
 
     // —— Diller ——

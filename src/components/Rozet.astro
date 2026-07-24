@@ -2,29 +2,25 @@
 import { ceviriYap, type Dil } from "@/i18n/utils";
 
 interface Props {
-  tip: "stok" | "durum";
-  deger: string;
+  deger: "stokta" | "siparise-bagli" | "tukendi";
   aktifDil: Dil;
 }
-const { tip, deger, aktifDil } = Astro.props;
+const { deger, aktifDil } = Astro.props;
 const t = ceviriYap(aktifDil);
 
-// Yalnızca palet tokenları; ayırt edicilik renge değil metin + dolgu/ağırlığa
-// dayanır (renk körlüğü / WCAG). Her rozet her zaman metin etiketi taşır.
-const stokStil: Record<string, string> = {
+// Stok rozeti. Ayırt edicilik renge değil metin + dolgu/ağırlığa dayanır
+// (renk körlüğü / WCAG); her rozet her zaman metin etiketi taşır.
+const stil: Record<string, string> = {
   stokta: "bg-vurgu text-kagit",
   "siparise-bagli": "border border-bakir text-bakir-koyu",
   tukendi: "border border-kenarlik text-murekkep/55",
 };
-const durumStil = "border border-kenarlik text-murekkep/70";
-
-const stil = tip === "stok" ? (stokStil[deger] ?? durumStil) : durumStil;
-const metin = t(`${tip}.${deger}`);
+const metin = t(`stok.${deger}`);
 ---
 
 <span
   class:list={[
     "inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-nowrap",
-    stil,
+    stil[deger] ?? "border border-kenarlik text-murekkep/70",
   ]}>{metin}</span
 >

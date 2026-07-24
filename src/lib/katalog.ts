@@ -35,22 +35,51 @@ export function tumUrunler(): Promise<ZenginUrun[]> {
 }
 
 async function _yukle(): Promise<ZenginUrun[]> {
-  if (sanityYapili()) return _sirala(await sanityUrunler());
-
-  if (canli) {
+  let liste: ZenginUrun[];
+  if (sanityYapili()) {
+    liste = await sanityUrunler();
+  } else if (canli) {
     throw new Error(
       "Yayın derlemesi (CANLI=1) için Sanity yapılandırması zorunlu. " +
         "SANITY_PROJECT_ID tanımlı değil; içerik dosyalarına (seed) düşülmez.",
     );
+  } else {
+    // Geliştirme: yerel içerik dosyaları (seed) — yalnızca dev'de serbest.
+    liste = await _icerikDosyalari();
   }
-  // Geliştirme: yerel içerik dosyaları (seed) — yalnızca dev'de serbest.
-  return _sirala(await _icerikDosyalari());
+  benzersizSluglar(liste); // aynı parça no'lu farklı ürünlere benzersiz URL
+  return _sirala(liste);
+}
+
+// Parça no artık birincil anahtar DEĞİL: aynı numara birden çok farklı ürüne
+// ait olabilir. Her ürüne benzersiz, kararlı slug ata: tekse parça no'nun
+// slug'ı; çakışmada id'ye göre sıralı -2/-3 eki. (id kararlı → URL kararlı.)
+function benzersizSluglar(urunler: ZenginUrun[]): void {
+  const gruplar = new Map<string, ZenginUrun[]>();
+  for (const u of urunler) {
+    const anahtar = aramaAnahtari(u.parcaNo);
+    const g = gruplar.get(anahtar);
+    if (g) g.push(u);
+    else gruplar.set(anahtar, [u]);
+  }
+  for (const grup of gruplar.values()) {
+    if (grup.length === 1) {
+      grup[0].slug = slugla(grup[0].parcaNo);
+      continue;
+    }
+    grup.sort((a, b) => a.id.localeCompare(b.id));
+    grup.forEach((u, i) => {
+      const taban = slugla(u.parcaNo);
+      u.slug = i === 0 ? taban : `${taban}-${i + 1}`;
+    });
+  }
 }
 
 function _sirala(zengin: ZenginUrun[]): ZenginUrun[] {
+  // Eklenme tarihi şemadan kaldırıldı; öne çıkanlar önce, sonra parça no'ya göre.
   return zengin.sort((a, b) => {
     if (a.oneCikan !== b.oneCikan) return a.oneCikan ? -1 : 1;
-    return b.eklenmeTarihi.getTime() - a.eklenmeTarihi.getTime();
+    return a.parcaNo.localeCompare(b.parcaNo);
   });
 }
 
@@ -80,7 +109,6 @@ async function _icerikDosyalari(): Promise<ZenginUrun[]> {
         kategoriAd: kategori?.ad ?? { tr: u.data.kategori.id },
         motorlar: u.data.uyumluMotorlar.map((ad) => ({ ad, slug: slugla(ad) })),
         stokDurumu: u.data.stokDurumu,
-        durum: u.data.durum,
         oneCikan: u.data.oneCikan,
         // Görsel: dosya diskte varsa yerel yol, yoksa null → yer tutucu.
         gorseller: u.data.gorseller.map((g) => ({
@@ -89,7 +117,6 @@ async function _icerikDosyalari(): Promise<ZenginUrun[]> {
         })),
         ad: u.data.ad,
         aciklama: u.data.aciklama,
-        eklenmeTarihi: u.data.eklenmeTarihi,
       };
     });
 }

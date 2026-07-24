@@ -29,12 +29,10 @@ export interface ZenginUrun {
   kategoriAd: Cevrilebilir;
   motorlar: Motor[];
   stokDurumu: "stokta" | "siparise-bagli" | "tukendi";
-  durum: "orijinal" | "muadil" | "revizyonlu";
   oneCikan: boolean;
   gorseller: Gorsel[];
   ad: Cevrilebilir;
   aciklama?: Cevrilebilir;
-  eklenmeTarihi: Date;
 }
 
 export interface Ayarlar {

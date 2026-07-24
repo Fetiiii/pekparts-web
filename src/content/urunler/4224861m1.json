@@ -1,0 +1,24 @@
+{
+  "parcaNo": "4224861M1",
+  "muadilNo": [
+    "4224861 M1"
+  ],
+  "marka": "ithal",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "MF 240",
+    "MF 285"
+  ],
+  "stokDurumu": "stokta",
+  "gorseller": [
+    {
+      "dosya": "4224861m1-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "ad": {
+    "tr": "Hava filtresi (ithal)",
+    "en": "Air filter (imported)"
+  }
+}

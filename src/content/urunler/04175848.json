@@ -1,0 +1,32 @@
+{
+  "parcaNo": "04175848",
+  "muadilNo": [
+    "0417 5848"
+  ],
+  "marka": "deutz",
+  "kategori": "yakit-sistemi",
+  "uyumluMotorlar": [
+    "TCD 2012 L04",
+    "TCD 2012 L06",
+    "BF4M 2012",
+    "BF6M 2012"
+  ],
+  "stokDurumu": "stokta",
+  "gorseller": [
+    {
+      "dosya": "04175848-1.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "ad": {
+    "tr": "Deutz yakıt enjeksiyon pompası",
+    "en": "Deutz fuel injection pump",
+    "ar": "مضخة حقن الوقود ديوتز",
+    "ru": "Топливный насос высокого давления Deutz"
+  },
+  "aciklama": {
+    "tr": "TCD 2012 serisi için yakıt enjeksiyon pompası.",
+    "en": "Fuel injection pump for the TCD 2012 series."
+  }
+}

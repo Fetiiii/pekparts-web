@@ -75,13 +75,10 @@ const tr: UISozluk = {
 
   "genel.todo": "PekParts olarak güvenilir yedek parça çözümleri sunuyoruz.",
 
-  // Stok / durum rozetleri
+  // Stok rozeti
   "stok.stokta": "Stokta",
   "stok.siparise-bagli": "Siparişe bağlı",
   "stok.tukendi": "Tükendi",
-  "durum.orijinal": "Orijinal",
-  "durum.muadil": "Muadil",
-  "durum.revizyonlu": "Revizyonlu",
 
   // Ürün kartı / detay
   "urun.fiyatSor": "Fiyat sor",
@@ -90,7 +87,6 @@ const tr: UISozluk = {
   "urun.kategori": "Kategori",
   "urun.parcaNo": "Parça no",
   "urun.muadilNo": "Muadil no",
-  "urun.durumBaslik": "Durum",
   "urun.gorselYok": "Görsel hazırlanıyor",
   "urun.gorselAcilim": "{ad} — parça no {no}",
   "urun.detay": "Ürün detayı",
@@ -205,13 +201,10 @@ const en: UISozluk = {
 
   "genel.todo": "PekParts provides reliable spare parts solutions.",
 
-  // Stock / condition badges
+  // Stock badge
   "stok.stokta": "In stock",
   "stok.siparise-bagli": "On order",
   "stok.tukendi": "Out of stock",
-  "durum.orijinal": "Original",
-  "durum.muadil": "Aftermarket",
-  "durum.revizyonlu": "Remanufactured",
 
   // Product card / detail
   "urun.fiyatSor": "Ask price",
@@ -220,7 +213,6 @@ const en: UISozluk = {
   "urun.kategori": "Category",
   "urun.parcaNo": "Part no",
   "urun.muadilNo": "Cross-ref no",
-  "urun.durumBaslik": "Condition",
   "urun.gorselYok": "Image coming soon",
   "urun.gorselAcilim": "{ad} — part no {no}",
   "urun.detay": "Product detail",

@@ -131,8 +131,7 @@ export function ExcelAraci() {
     try {
       const urunler = await client.fetch<UrunVeri[]>(`*[_type=="urun"]{
         parcaNo, muadilNo, "marka": marka->slug.current, "kategori": kategori->slug.current,
-        uyumluMotorlar, stokDurumu, durum, fiyat, paraBirimi, oneCikan, yayinda,
-        "eklenmeTarihi": eklenmeTarihi, ad, aciklama
+        uyumluMotorlar, stokDurumu, oneCikan, yayinda, ad, aciklama
       }`);
       const buf = await disaAktar(urunler.map(temizle));
       indir(buf, `pekparts-katalog-${new Date().toISOString().slice(0, 10)}.xlsx`);
@@ -208,6 +207,7 @@ function Onizleme({ rapor, onAktar, mesgul }: { rapor: Rapor; onAktar: () => voi
         <Badge tone="positive">Yeni: {rapor.yeni}</Badge>
         <Badge tone="caution">Güncelleme: {rapor.guncelleme}</Badge>
         <Badge tone={rapor.hatali ? "critical" : "default"}>Hatalı: {rapor.hatali}</Badge>
+        {rapor.kopya > 0 && <Badge tone="default">Kopya (atlanan): {rapor.kopya}</Badge>}
       </Flex>
 
       {hataliSatirlar.length > 0 && (
@@ -258,12 +258,8 @@ function urunAlanlari(
     kategori: { _type: "reference", _ref: haritalar.kategori.get(u.kategori)! },
     uyumluMotorlar: u.uyumluMotorlar,
     stokDurumu: u.stokDurumu,
-    durum: u.durum,
-    ...(u.fiyat !== undefined ? { fiyat: u.fiyat } : {}),
-    ...(u.paraBirimi ? { paraBirimi: u.paraBirimi } : {}),
     oneCikan: u.oneCikan,
     yayinda: u.yayinda,
-    eklenmeTarihi: u.eklenmeTarihi,
     ad: { _type: "cevrilebilirAd", ...u.ad },
     ...(u.aciklama ? { aciklama: { _type: "cevrilebilirMetin", ...u.aciklama } } : {}),
   };
@@ -277,13 +273,9 @@ function temizle(u: any): UrunVeri {
     marka: u.marka ?? "",
     kategori: u.kategori ?? "",
     uyumluMotorlar: u.uyumluMotorlar ?? [],
-    stokDurumu: u.stokDurumu,
-    durum: u.durum,
-    fiyat: u.fiyat ?? undefined,
-    paraBirimi: u.paraBirimi ?? undefined,
+    stokDurumu: u.stokDurumu ?? "stokta",
     oneCikan: !!u.oneCikan,
     yayinda: u.yayinda !== false,
-    eklenmeTarihi: (u.eklenmeTarihi ?? "").slice(0, 10),
     ad: u.ad ?? { tr: "" },
     aciklama: u.aciklama ?? undefined,
   };

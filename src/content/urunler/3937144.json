@@ -1,0 +1,21 @@
+{
+  "parcaNo": "3937144",
+  "muadilNo": [],
+  "marka": "delphi",
+  "kategori": "yakit-sistemi",
+  "uyumluMotorlar": [
+    "6BT 5.9"
+  ],
+  "stokDurumu": "siparise-bagli",
+  "gorseller": [
+    {
+      "dosya": "3937144-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "ad": {
+    "tr": "Delphi yakıt pompası",
+    "en": "Delphi fuel pump"
+  }
+}

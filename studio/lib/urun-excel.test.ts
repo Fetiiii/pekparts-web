@@ -1,169 +1,132 @@
-// Excel motoru testi — gerçek koşullar: 300+ satır, hatalı/tekrarlı/Türkçe/boş.
+// Excel motoru testi — yeni tekrar modeli: parça no birincil anahtar DEĞİL.
+// Aynı parça no'lu FARKLI ürün (farklı TR ad) geçerlidir; BİREBİR aynı (parça no
+// + marka + kategori + TR ad) satır "kopya" olarak atlanır. Ayrıca slug-only
+// marka/kategori, string parça no, stok default. 300+ satır.
 // Çalıştır: node --experimental-strip-types lib/urun-excel.test.ts
 import ExcelJS from "exceljs";
-import {
-  SUTUNLAR,
-  ayristir,
-  dogrula,
-  disaAktar,
-  sablonUret,
-  type Baglam,
-} from "./urun-excel.ts";
+import { SUTUNLAR, ayristir, dogrula, disaAktar, sablonUret, type Baglam } from "./urun-excel.ts";
 
-let gecti = 0;
-let kaldi = 0;
-function ok(kosul: boolean, ad: string, ek = "") {
-  if (kosul) {
-    gecti++;
-    console.log(`✓ ${ad}`);
-  } else {
-    kaldi++;
-    console.log(`✗ HATA: ${ad} ${ek}`);
-  }
-}
+let gecti = 0, kaldi = 0;
+const ok = (k, ad, ek = "") =>
+  k ? (gecti++, console.log(`✓ ${ad}`)) : (kaldi++, console.log(`✗ HATA: ${ad} ${ek}`));
 
 const baglam: Baglam = {
   markalar: [
-    { slug: "deutz", ad: "Deutz" },
-    { slug: "perkins", ad: "Perkins" },
-    { slug: "cummins", ad: "Cummins" },
-    { slug: "caterpillar", ad: "Caterpillar" },
-    { slug: "massey-ferguson", ad: "Massey Ferguson" },
-    { slug: "jcb", ad: "JCB" },
+    { slug: "deutz", ad: "Deutz" }, { slug: "kolbenschmidt", ad: "Kolbenschmidt" },
+    { slug: "victor-reinz", ad: "Victor Reinz" }, { slug: "bosch", ad: "Bosch" },
+    { slug: "mahle", ad: "Mahle" }, { slug: "volvo", ad: "Volvo" }, { slug: "sdf", ad: "SDF" },
+    { slug: "cnh", ad: "CNH" }, { slug: "goetze", ad: "Goetze" }, { slug: "delphi", ad: "Delphi" },
+    { slug: "ithal", ad: "İthal" },
   ],
   kategoriler: [
-    { slug: "conta-takimlari", adlar: ["Conta takımları", "Gasket sets"] },
+    { slug: "gasketlar-keceler", adlar: ["Contalar ve keçeler", "Gaskets & seals"] },
+    { slug: "sensor-elektrik", adlar: ["Sensörler ve elektrik"] },
+    { slug: "motor-ic-parcalari", adlar: ["Motor iç parçaları", "Engine internals"] },
+    { slug: "yatak-burc", adlar: ["Yataklar ve burçlar"] }, { slug: "diger", adlar: ["Diğer"] },
     { slug: "filtreler", adlar: ["Filtreler", "Filters"] },
-    { slug: "motor-parcalari", adlar: ["Motor parçaları", "Engine parts"] },
-    { slug: "yakit-sistemi", adlar: ["Yakıt sistemi", "Fuel system"] },
-    { slug: "sogutma-sistemi", adlar: ["Soğutma sistemi", "Cooling system"] },
-    { slug: "komple-motorlar", adlar: ["Komple motorlar", "Complete engines"] },
+    { slug: "yakit-sistemi", adlar: ["Yakıt sistemi"] }, { slug: "pompalar", adlar: ["Pompalar"] },
+    { slug: "kayis-kasnak", adlar: ["Kayışlar"] }, { slug: "sogutma-sistemi", adlar: ["Soğutma"] },
+    { slug: "turbo", adlar: ["Turbo"] },
   ],
-  mevcutParcaNolar: ["04175848", "2645A050"], // güncelleme testi için
+  mevcutParcaNolar: ["04175848", "2645A050"],
 };
 
-// —— Test dosyasını programatik oluştur ——
 async function testDosyasi(): Promise<ArrayBuffer> {
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet("Ürünler");
   ws.columns = SUTUNLAR.map((s) => ({ header: s.baslik, key: s.anahtar }));
-  ws.getRow(1).font = { bold: true };
+  const satir = (o) => ws.addRow(o);
 
-  const satir = (o: Record<string, unknown>) => ws.addRow(o);
+  // 16 kenar-durum satırı
+  satir({ parcaNo: "04175848", marka: "deutz", kategori: "yakit-sistemi", stokDurumu: "Stokta", ad_tr: "Yakıt pompası çğışöü" }); // güncelleme
+  satir({ parcaNo: "0417 5848", marka: "deutz", kategori: "yakit-sistemi", stokDurumu: "Stokta", ad_tr: "Yakıt pompası çğışöü", ad_en: "Fuel pump" }); // BİREBİR aynı (norm parça+marka+kat+TR ad) → kopya
+  satir({ parcaNo: "DUP-9", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", ad_tr: "Yağ filtresi" }); // yeni
+  satir({ parcaNo: "DUP-9", marka: "ithal", kategori: "filtreler", stokDurumu: "Stokta", ad_tr: "Hava filtresi" }); // yeni — aynı parça no, FARKLI ürün
+  satir({ parcaNo: "", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", ad_tr: "Parçasız" }); // hata
+  satir({ parcaNo: "X-VR", marka: "Victor Reinz", kategori: "gasketlar-keceler", stokDurumu: "Stokta", ad_tr: "Ad ile marka" }); // hata (slug-only)
+  satir({ parcaNo: "X-M", marka: "xyz", kategori: "filtreler", stokDurumu: "Stokta", ad_tr: "Bilinmeyen marka" }); // hata
+  satir({ parcaNo: "X-K", marka: "deutz", kategori: "yok-boyle", stokDurumu: "Stokta", ad_tr: "Bilinmeyen kategori" }); // hata
+  satir({ parcaNo: "X-KB", marka: "deutz", kategori: "", stokDurumu: "Stokta", ad_tr: "Kategorisiz" }); // hata
+  satir({ parcaNo: "X-S", marka: "deutz", kategori: "filtreler", stokDurumu: "belki", ad_tr: "Stok hatalı" }); // hata
+  satir({ parcaNo: "X-A", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", ad_tr: "" }); // hata
+  satir({ parcaNo: "VR-100", marka: "victor-reinz", kategori: "gasketlar-keceler", stokDurumu: "Siparişe bağlı", ad_tr: "Slug marka" }); // yeni
+  satir({ parcaNo: "TOL-1", marka: " DEUTZ ", kategori: " MOTOR-IC-PARCALARI ", ad_tr: "Tolerans + boş stok" }); // yeni
+  satir({ parcaNo: 4910987, marka: "deutz", kategori: "diger", stokDurumu: "Stokta", ad_tr: "Sayısal parça no" }); // yeni
+  satir({ parcaNo: "04910988", marka: "deutz", kategori: "motor-ic-parcalari", stokDurumu: "Stokta", ad_tr: "Baştaki sıfır" }); // yeni
+  satir({ parcaNo: "2645A050", marka: "volvo", kategori: "motor-ic-parcalari", stokDurumu: "Stokta", ad_tr: "Volvo silindir kapağı" }); // güncelleme
 
-  // 17 kenar-durum satırı
-  satir({ parcaNo: "04175848", marka: "deutz", kategori: "yakit-sistemi", stokDurumu: "Stokta", durum: "Orijinal", ad_tr: "Deutz yakıt pompası", oneCikan: "Evet" }); // güncelleme, Türkçe
-  satir({ parcaNo: "0417 5848", marka: "deutz", kategori: "yakit-sistemi", stokDurumu: "Stokta", durum: "Orijinal", ad_tr: "Kopya kayıt" }); // normalize dup → hata
-  satir({ parcaNo: "", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Parçasız" }); // parcaNo boş → hata
-  satir({ parcaNo: "X-VOLVO", marka: "Volvo", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Volvo filtre" }); // bilinmeyen marka
-  satir({ parcaNo: "X-UFO", marka: "deutz", kategori: "uçan-halı", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "UFO parça" }); // bilinmeyen kategori
-  satir({ parcaNo: "X-KATBOS", marka: "deutz", kategori: "", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Kategorisiz" }); // kategori boş
-  satir({ parcaNo: "X-STOK", marka: "deutz", kategori: "filtreler", stokDurumu: "belki", durum: "Muadil", ad_tr: "Stok hatalı" }); // geçersiz stok
-  satir({ parcaNo: "X-DURUM", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", durum: "yeni gibi", ad_tr: "Durum hatalı" }); // geçersiz durum
-  satir({ parcaNo: "X-FIYAT", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Fiyat hatalı", fiyat: "abc" }); // geçersiz fiyat
-  satir({ parcaNo: "X-ADSIZ", marka: "deutz", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "" }); // ad_tr boş
-  satir({ parcaNo: "P-2645", marka: "Perkins", kategori: "motor-parcalari", stokDurumu: "Stokta", durum: "Orijinal", ad_tr: "Perkins parça (marka adıyla)" }); // marka AD ile
-  satir({ parcaNo: "P-FILT", marka: "perkins", kategori: "Filters", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "İngilizce kategori adı" }); // kategori EN ad ile
-  satir({ parcaNo: "P-SIP", marka: "cummins", kategori: "yakit-sistemi", stokDurumu: "Siparişe bağlı", durum: "Orijinal", ad_tr: "Sipariş etiketli" }); // TR stok etiketi
-  satir({ parcaNo: "P-USD", marka: "cummins", kategori: "yakit-sistemi", stokDurumu: "Stokta", durum: "Orijinal", ad_tr: "Dolarlı", fiyat: "2400", paraBirimi: "$" }); // $ → USD
-  satir({ parcaNo: "P-YAYIN", marka: "jcb", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Yayında boş", oneCikan: "Evet" }); // yayinda boş → true
-  satir({ parcaNo: "P-TARIH", marka: "jcb", kategori: "filtreler", stokDurumu: "Stokta", durum: "Muadil", ad_tr: "Tarih GG.AA.YYYY", eklenmeTarihi: "14.05.2026" }); // tarih formatı
-  satir({ parcaNo: "2645A050", marka: "perkins", kategori: "motor-parcalari", stokDurumu: "Stokta", durum: "Orijinal", ad_tr: "Perkins silindir kapağı" }); // güncelleme
-
-  // 300 geçerli üretilmiş satır
-  const markaSlug = ["deutz", "perkins", "cummins", "caterpillar", "massey-ferguson", "jcb"];
-  const katSlug = ["conta-takimlari", "filtreler", "motor-parcalari", "yakit-sistemi", "sogutma-sistemi", "komple-motorlar"];
+  const markaSlug = ["deutz", "kolbenschmidt", "victor-reinz", "bosch", "mahle", "volvo"];
+  const katSlug = ["gasketlar-keceler", "filtreler", "motor-ic-parcalari", "yakit-sistemi", "pompalar", "sogutma-sistemi"];
   const stok = ["Stokta", "Siparişe bağlı", "Tükendi"];
-  const durum = ["Orijinal", "Muadil", "Revizyonlu"];
   for (let i = 1; i <= 300; i++) {
     satir({
       parcaNo: `GEN-${String(i).padStart(4, "0")}`,
       muadilNo: i % 3 === 0 ? `ALT-${i}; ALT2-${i}` : "",
-      marka: markaSlug[i % 6],
-      kategori: katSlug[i % 6],
-      uyumluMotorlar: "TCD 2012 L04, BF4M 2012",
-      stokDurumu: stok[i % 3],
-      durum: durum[i % 3],
-      fiyat: i % 4 === 0 ? String(1000 + i) : "",
-      paraBirimi: i % 4 === 0 ? "TRY" : "",
-      oneCikan: i % 10 === 0 ? "Evet" : "",
-      yayinda: "",
-      ad_tr: `Üretilmiş parça ${i} — çğışöü`,
-      ad_en: i % 2 === 0 ? `Generated part ${i}` : "",
+      marka: markaSlug[i % 6], kategori: katSlug[i % 6],
+      uyumluMotorlar: "TCD 2012 L04, BF4M 2012", stokDurumu: stok[i % 3],
+      oneCikan: i % 10 === 0 ? "Evet" : "", yayinda: "",
+      ad_tr: `Üretilmiş parça ${i} — çğışöü`, ad_en: i % 2 === 0 ? `Generated ${i}` : "",
     });
   }
   return wb.xlsx.writeBuffer();
 }
 
-// —— Çalıştır ——
-console.log("=== Excel motoru testi ===\n");
+console.log("=== Excel motoru testi (tekrar modeli) ===\n");
+
+const basliklar = SUTUNLAR.map((s) => s.baslik);
+ok(!basliklar.some((b) => ["Durum", "Fiyat", "Para Birimi", "Eklenme Tarihi"].includes(b)),
+  "şablonda kaldırılan kolonlar yok");
 
 const buf = await testDosyasi();
 const ham = await ayristir(buf);
-ok(ham.length === 317, "317 veri satırı ayrıştırıldı", `(bulunan: ${ham.length})`);
+ok(ham.length === 316, "316 veri satırı ayrıştırıldı", `(${ham.length})`);
 
 const rapor = dogrula(ham, baglam);
-console.log(`\nRapor: toplam=${rapor.toplam} yeni=${rapor.yeni} güncelleme=${rapor.guncelleme} hatalı=${rapor.hatali}\n`);
-
-ok(rapor.toplam === 317, "toplam 317");
+console.log(`\nRapor: toplam=${rapor.toplam} yeni=${rapor.yeni} güncelleme=${rapor.guncelleme} hatalı=${rapor.hatali} kopya=${rapor.kopya}\n`);
+ok(rapor.toplam === 316, "toplam 316", `(${rapor.toplam})`);
 ok(rapor.yeni === 306, "yeni 306", `(${rapor.yeni})`);
-ok(rapor.guncelleme === 2, "güncelleme 2 (04175848, 2645A050)", `(${rapor.guncelleme})`);
-ok(rapor.hatali === 9, "hatalı 9", `(${rapor.hatali})`);
-ok(rapor.gecerliUrunler.length === 308, "kısmi aktarım: 308 geçerli ürün", `(${rapor.gecerliUrunler.length})`);
+ok(rapor.guncelleme === 2, "güncelleme 2", `(${rapor.guncelleme})`);
+ok(rapor.hatali === 7, "hatalı 7", `(${rapor.hatali})`);
+ok(rapor.kopya === 1, "kopya 1", `(${rapor.kopya})`);
+ok(rapor.gecerliUrunler.length === 308, "geçerli 308 (yeni+güncelleme)", `(${rapor.gecerliUrunler.length})`);
 
-// Belirli hata mesajları
-const hata = (parcaNo: string) => rapor.satirlar.find((s) => s.parcaNo === parcaNo);
-ok(!!hata("0417 5848")?.hatalar.some((h) => h.includes("tekrar ediyor")), "normalize kopya yakalandı (0417 5848 ↔ 04175848)");
-ok(!!hata("")?.hatalar.some((h) => h.includes("Parça No boş")), "boş parça no yakalandı");
-ok(!!hata("X-VOLVO")?.hatalar.some((h) => h.includes("Bilinmeyen marka")), "bilinmeyen marka yakalandı");
-ok(!!hata("X-UFO")?.hatalar.some((h) => h.includes("Bilinmeyen kategori")), "bilinmeyen kategori yakalandı");
-ok(!!hata("X-KATBOS")?.hatalar.some((h) => h.includes("Kategori boş")), "boş kategori yakalandı");
-ok(!!hata("X-STOK")?.hatalar.some((h) => h.includes("Stok Durumu")), "geçersiz stok yakalandı");
-ok(!!hata("X-FIYAT")?.hatalar.some((h) => h.includes("Fiyat")), "geçersiz fiyat yakalandı");
-ok(!!hata("X-ADSIZ")?.hatalar.some((h) => h.includes("Ad (TR)")), "boş ad_tr yakalandı");
+const bul = (p) => rapor.satirlar.find((s) => s.parcaNo === p);
+// YENİ MODEL: birebir aynı → kopya; farklı ama aynı parça no → iki ayrı geçerli
+ok(bul("0417 5848")?.islem === "kopya", "birebir aynı satır → kopya (atlandı)", bul("0417 5848")?.islem);
+const dup9 = rapor.satirlar.filter((s) => s.parcaNo === "DUP-9" && s.urun);
+ok(dup9.length === 2, "aynı parça no + farklı TR ad → 2 ayrı geçerli ürün (hata değil)", `(${dup9.length})`);
+ok(dup9[0]?.urun?.ad.tr !== dup9[1]?.urun?.ad.tr, "iki farklı ürünün adları korundu");
 
-// Hata satırlarında gerçek Excel satır no'su var mı
-const volvo = hata("X-VOLVO");
-ok(!!volvo && volvo.satir > 1, "hata satırı gerçek Excel satır no taşıyor", `(satır ${volvo?.satir})`);
+// Hatalar
+ok(!!bul("")?.hatalar.some((h) => h.includes("Parça No boş")), "boş parça no");
+ok(!!bul("X-VR")?.hatalar.some((h) => h.includes("Bilinmeyen marka")), "marka görünen ad ile eşleşmez (slug-only)");
+ok(!!bul("X-M")?.hatalar.some((h) => h.includes("Bilinmeyen marka")), "bilinmeyen marka");
+ok(!!bul("X-K")?.hatalar.some((h) => h.includes("Bilinmeyen kategori")), "bilinmeyen kategori");
+ok(!!bul("X-KB")?.hatalar.some((h) => h.includes("Kategori boş")), "boş kategori");
+ok(!!bul("X-S")?.hatalar.some((h) => h.includes("Stok Durumu")), "geçersiz stok");
+ok(!!bul("X-A")?.hatalar.some((h) => h.includes("Ad (TR)")), "boş ad_tr");
 
-// Değer eşlemeleri
-const perkinsAd = rapor.satirlar.find((s) => s.parcaNo === "P-2645");
-ok(perkinsAd?.urun?.marka === "perkins", "marka adıyla çözüldü (Perkins → perkins)");
-const enKat = rapor.satirlar.find((s) => s.parcaNo === "P-FILT");
-ok(enKat?.urun?.kategori === "filtreler", "İngilizce kategori adı çözüldü (Filters → filtreler)");
-const sip = rapor.satirlar.find((s) => s.parcaNo === "P-SIP");
-ok(sip?.urun?.stokDurumu === "siparise-bagli", "TR stok etiketi çözüldü (Siparişe bağlı)");
-const usd = rapor.satirlar.find((s) => s.parcaNo === "P-USD");
-ok(usd?.urun?.paraBirimi === "USD", "para birimi $ → USD");
-const yayin = rapor.satirlar.find((s) => s.parcaNo === "P-YAYIN");
-ok(yayin?.urun?.yayinda === true, "boş yayında → true (varsayılan)");
-const tarih = rapor.satirlar.find((s) => s.parcaNo === "P-TARIH");
-ok(tarih?.urun?.eklenmeTarihi === "2026-05-14", "GG.AA.YYYY → YYYY-AA-GG", `(${tarih?.urun?.eklenmeTarihi})`);
+// Çözümlemeler
+ok(bul("VR-100")?.urun?.marka === "victor-reinz", "slug ile marka çözüldü");
+ok(bul("VR-100")?.urun?.stokDurumu === "siparise-bagli", "TR stok etiketi çözüldü");
+ok(bul("TOL-1")?.urun?.marka === "deutz" && bul("TOL-1")?.urun?.kategori === "motor-ic-parcalari", "slug tolerans");
+ok(bul("TOL-1")?.urun?.stokDurumu === "stokta", "boş stok → stokta");
+ok(bul("4910987")?.urun?.parcaNo === "4910987", "sayısal parça no string'e zorlandı", bul("4910987")?.urun?.parcaNo);
+ok(bul("04910988")?.urun?.parcaNo === "04910988", "baştaki sıfır korundu");
+ok(bul("04175848")?.islem === "guncelleme", "mevcut parça → güncelleme");
+ok(bul("GEN-0001")?.urun?.ad.tr.includes("çğışöü"), "Türkçe karakter korundu");
+const orn = bul("GEN-0001")?.urun as any;
+ok(orn && !("fiyat" in orn) && !("durum" in orn) && !("eklenmeTarihi" in orn), "üründe kaldırılan alanlar yok");
 
-// parça no NORMALİZE EDİLMEDEN saklanıyor mu
-const upd = rapor.satirlar.find((s) => s.parcaNo === "04175848");
-ok(upd?.urun?.parcaNo === "04175848" && upd?.islem === "guncelleme", "parça no biçimi korundu + güncelleme");
-
-// Türkçe karakter korunuyor mu
-const genOrn = rapor.satirlar.find((s) => s.parcaNo === "GEN-0001");
-ok(genOrn?.urun?.ad.tr.includes("çğışöü"), "Türkçe karakterler korundu");
-
-// muadilNo ayrıştırma
-const genMuadil = rapor.satirlar.find((s) => s.parcaNo === "GEN-0003");
-ok(genMuadil?.urun?.muadilNo.length === 2, "muadil no ; ile ayrıştırıldı", `(${JSON.stringify(genMuadil?.urun?.muadilNo)})`);
-
-// —— Dışa aktar → tekrar ayrıştır (round-trip) ——
+// Round-trip
 const disa = await disaAktar(rapor.gecerliUrunler);
 const tekrar = await ayristir(disa);
-ok(tekrar.length === rapor.gecerliUrunler.length, "dışa aktarım round-trip satır sayısı", `(${tekrar.length})`);
+ok(tekrar.length === rapor.gecerliUrunler.length, "dışa aktarım round-trip satır sayısı");
 const tekrarRapor = dogrula(tekrar, { ...baglam, mevcutParcaNolar: [] });
-ok(tekrarRapor.hatali === 0, "dışa aktarılan dosya hatasız geri okundu", `(hatalı: ${tekrarRapor.hatali})`);
+ok(tekrarRapor.hatali === 0, "dışa aktarılan dosya hatasız okundu", `(${tekrarRapor.hatali})`);
 
-// —— Şablon üretimi ——
 const sablon = await sablonUret();
-ok(sablon.byteLength > 0, "şablon üretildi", `(${sablon.byteLength} bayt)`);
-const sablonHam = await ayristir(sablon);
-ok(sablonHam.every((r) => r.veri.parcaNo !== "" || true), "şablon örnek satırı ayrıştırılabilir");
+ok(sablon.byteLength > 0, "şablon üretildi");
 
 console.log(`\n=== ${gecti} geçti, ${kaldi} kaldı ===`);
 if (kaldi > 0) process.exit(1);

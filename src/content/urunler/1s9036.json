@@ -1,0 +1,22 @@
+{
+  "parcaNo": "1S9036",
+  "muadilNo": [],
+  "marka": "kolbenschmidt",
+  "kategori": "motor-ic-parcalari",
+  "uyumluMotorlar": [
+    "3306",
+    "3306B"
+  ],
+  "stokDurumu": "stokta",
+  "gorseller": [
+    {
+      "dosya": "1s9036-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "ad": {
+    "tr": "Kolbenschmidt piston segman takımı",
+    "en": "Kolbenschmidt piston ring set"
+  }
+}

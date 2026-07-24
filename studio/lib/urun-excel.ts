@@ -25,18 +25,14 @@ export interface Sutun {
 }
 
 export const SUTUNLAR: Sutun[] = [
-  { anahtar: "parcaNo", baslik: "Parça No", aciklama: "Zorunlu. Ürünün ana parça numarası. Girdiğiniz biçim korunur.", ornek: "04175848", zorunlu: true },
+  { anahtar: "parcaNo", baslik: "Parça No", aciklama: "Zorunlu. Ürünün ana parça numarası. Metin olarak girin; baştaki sıfırlar korunur.", ornek: "04175848", zorunlu: true },
   { anahtar: "muadilNo", baslik: "Muadil No", aciklama: "Çapraz referans numaraları. Birden fazlaysa virgül veya noktalı virgülle ayırın.", ornek: "0417 5848; 4175848" },
-  { anahtar: "marka", baslik: "Marka", aciklama: "Zorunlu. Tanımlı bir marka (slug veya adı). Örn: deutz, Perkins.", ornek: "deutz", zorunlu: true },
-  { anahtar: "kategori", baslik: "Kategori", aciklama: "Zorunlu. Tanımlı bir kategori (slug veya adı).", ornek: "yakit-sistemi", zorunlu: true },
+  { anahtar: "marka", baslik: "Marka", aciklama: "Zorunlu. Tanımlı bir marka SLUG'ı (adı değil). Örn: deutz, bosch, ithal.", ornek: "deutz", zorunlu: true },
+  { anahtar: "kategori", baslik: "Kategori", aciklama: "Zorunlu. Tanımlı bir kategori SLUG'ı (adı değil). Örn: motor-ic-parcalari.", ornek: "yakit-sistemi", zorunlu: true },
   { anahtar: "uyumluMotorlar", baslik: "Uyumlu Motorlar", aciklama: "Motor modelleri, virgülle ayrılmış.", ornek: "TCD 2012 L04, BF4M 2012" },
-  { anahtar: "stokDurumu", baslik: "Stok Durumu", aciklama: "Zorunlu. Değerler: Stokta / Siparişe bağlı / Tükendi.", ornek: "Stokta", zorunlu: true },
-  { anahtar: "durum", baslik: "Durum", aciklama: "Zorunlu. Değerler: Orijinal / Muadil / Revizyonlu.", ornek: "Orijinal", zorunlu: true },
-  { anahtar: "fiyat", baslik: "Fiyat", aciklama: "Sayı, opsiyonel. Sitede gösterilmez, panelde saklanır.", ornek: "96200" },
-  { anahtar: "paraBirimi", baslik: "Para Birimi", aciklama: "TRY / USD / EUR.", ornek: "TRY" },
+  { anahtar: "stokDurumu", baslik: "Stok Durumu", aciklama: "Değerler: Stokta / Siparişe bağlı / Tükendi. Boşsa Stokta kabul edilir.", ornek: "Stokta" },
   { anahtar: "oneCikan", baslik: "Öne Çıkan", aciklama: "Ana sayfada gösterilsin mi? Evet / Hayır.", ornek: "Hayır" },
   { anahtar: "yayinda", baslik: "Yayında", aciklama: "Sitede yayınlansın mı? Evet / Hayır. Boşsa Evet kabul edilir.", ornek: "Evet" },
-  { anahtar: "eklenmeTarihi", baslik: "Eklenme Tarihi", aciklama: "Opsiyonel. GG.AA.YYYY veya YYYY-AA-GG. Boşsa bugünün tarihi.", ornek: "2026-05-14" },
   { anahtar: "ad_tr", baslik: "Ad (TR)", aciklama: "Zorunlu. Türkçe ürün adı.", ornek: "Deutz yakıt enjeksiyon pompası", zorunlu: true },
   { anahtar: "ad_en", baslik: "Ad (EN)", aciklama: "İngilizce ürün adı.", ornek: "Deutz fuel injection pump" },
   { anahtar: "ad_ar", baslik: "Ad (AR)", aciklama: "Arapça ürün adı.", ornek: "" },
@@ -63,12 +59,8 @@ export interface UrunVeri {
   kategori: string; // slug
   uyumluMotorlar: string[];
   stokDurumu: "stokta" | "siparise-bagli" | "tukendi";
-  durum: "orijinal" | "muadil" | "revizyonlu";
-  fiyat?: number;
-  paraBirimi?: "TRY" | "USD" | "EUR";
   oneCikan: boolean;
   yayinda: boolean;
-  eklenmeTarihi: string; // YYYY-MM-DD
   ad: Cevrilebilir;
   aciklama?: Cevrilebilir;
 }
@@ -79,7 +71,9 @@ export interface Baglam {
   mevcutParcaNolar: string[]; // güncelleme/yeni ayrımı için
 }
 
-export type Islem = "yeni" | "guncelleme" | "hata";
+// "kopya" = aynı parça no + BİREBİR aynı içerik (sehven iki kez girilmiş) → atlanır.
+// Aynı parça no'lu FARKLI ürünler hata değildir; ayrı ürün olarak geçerli sayılır.
+export type Islem = "yeni" | "guncelleme" | "hata" | "kopya";
 
 export interface SatirSonuc {
   satir: number; // gerçek Excel satır numarası
@@ -94,17 +88,24 @@ export interface Rapor {
   yeni: number;
   guncelleme: number;
   hatali: number;
+  kopya: number; // birebir aynı, atlanan satırlar
   satirlar: SatirSonuc[];
-  gecerliUrunler: UrunVeri[]; // kısmi aktarım için (hatasız satırlar)
+  gecerliUrunler: UrunVeri[]; // kısmi aktarım için (hatasız + kopya olmayan)
 }
 
 // ————————————————————————————————————————————————
 // Yardımcılar
 // ————————————————————————————————————————————————
 
-/** Yalnızca EŞLEŞTİRME için normalizasyon (arama indeksiyle aynı kural). */
+/** Parça no kimlik/tekrar EŞLEŞTİRMESİ için normalizasyon (arama ile aynı). */
 export function anahtarla(deger: string): string {
   return deger.toLowerCase().replace(/[\s.\-_/]/g, "");
+}
+
+/** Marka/kategori SLUG eşleştirmesi: büyük/küçük + kenar boşluğa toleranslı,
+ *  ama tire korunur (slug'lar tireli). Görünen ad ile eşleşme YAPILMAZ. */
+function slugNorm(deger: string): string {
+  return deger.trim().toLowerCase();
 }
 
 function metin(v: unknown): string {
@@ -144,33 +145,6 @@ const STOK_ESLEME: Record<string, UrunVeri["stokDurumu"]> = {
   "in stock": "stokta",
   "out of stock": "tukendi",
 };
-const DURUM_ESLEME: Record<string, UrunVeri["durum"]> = {
-  orijinal: "orijinal",
-  original: "orijinal",
-  muadil: "muadil",
-  aftermarket: "muadil",
-  revizyonlu: "revizyonlu",
-  remanufactured: "revizyonlu",
-  revizeli: "revizyonlu",
-};
-const PARA_ESLEME: Record<string, UrunVeri["paraBirimi"]> = {
-  try: "TRY", tl: "TRY", "₺": "TRY",
-  usd: "USD", "$": "USD", dolar: "USD",
-  eur: "EUR", "€": "EUR", euro: "EUR",
-};
-
-function tarihCoz(v: unknown): { deger?: string; hata?: string } {
-  const s = metin(v);
-  if (s === "") return { deger: new Date().toISOString().slice(0, 10) };
-  if (v instanceof Date && !isNaN(v.getTime())) return { deger: v.toISOString().slice(0, 10) };
-  // YYYY-MM-DD
-  let m = s.match(/^(\d{4})[-./](\d{1,2})[-./](\d{1,2})$/);
-  if (m) return { deger: `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}` };
-  // GG.AA.YYYY
-  m = s.match(/^(\d{1,2})[-./](\d{1,2})[-./](\d{4})$/);
-  if (m) return { deger: `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` };
-  return { hata: `tarih "${s}" tanınmadı (GG.AA.YYYY veya YYYY-AA-GG bekleniyor)` };
-}
 
 // ————————————————————————————————————————————————
 // Şablon üretimi
@@ -184,6 +158,9 @@ export async function sablonUret(): Promise<ArrayBuffer> {
     header: s.baslik,
     key: s.anahtar,
     width: Math.max(14, Math.min(40, s.baslik.length + 6)),
+    // Parça/muadil no METİN biçimi: Excel sayıya çevirip baştaki sıfırı yemesin.
+    style:
+      s.anahtar === "parcaNo" || s.anahtar === "muadilNo" ? { numFmt: "@" } : undefined,
   }));
 
   // 1. satır: başlıklar (kalın)
@@ -265,51 +242,40 @@ export async function ayristir(data: ArrayBuffer | Buffer): Promise<HamSatir[]> 
 // Doğrulama + fark
 // ————————————————————————————————————————————————
 export function dogrula(ham: HamSatir[], baglam: Baglam): Rapor {
-  // Marka/kategori arama haritaları (slug + tüm adlar → slug)
+  // Marka/kategori eşleşmesi YALNIZCA slug ile (görünen ad değil).
   const markaHarita = new Map<string, string>();
-  for (const m of baglam.markalar) {
-    markaHarita.set(anahtarla(m.slug), m.slug);
-    markaHarita.set(anahtarla(m.ad), m.slug);
-  }
+  for (const m of baglam.markalar) markaHarita.set(slugNorm(m.slug), m.slug);
   const kategoriHarita = new Map<string, string>();
-  for (const k of baglam.kategoriler) {
-    kategoriHarita.set(anahtarla(k.slug), k.slug);
-    for (const ad of k.adlar) kategoriHarita.set(anahtarla(ad), k.slug);
-  }
+  for (const k of baglam.kategoriler) kategoriHarita.set(slugNorm(k.slug), k.slug);
   const mevcutSet = new Set(baglam.mevcutParcaNolar.map(anahtarla));
 
-  const gorulen = new Map<string, number>(); // normalize parcaNo → ilk satır
+  const imzalar = new Set<string>(); // birebir aynı satırları yakalamak için
   const satirlar: SatirSonuc[] = [];
 
   for (const { satir, veri } of ham) {
     const hatalar: string[] = [];
     const parcaNo = metin(veri.parcaNo);
 
-    // parcaNo
+    // parcaNo — birincil anahtar DEĞİL; aynı numaralı farklı ürün olabilir.
     if (!parcaNo) hatalar.push("Parça No boş (zorunlu)");
     const nAnahtar = anahtarla(parcaNo);
-    if (parcaNo && gorulen.has(nAnahtar)) {
-      hatalar.push(`Parça numarası tekrar ediyor (${gorulen.get(nAnahtar)}. satırla aynı)`);
-    } else if (parcaNo) {
-      gorulen.set(nAnahtar, satir);
-    }
 
-    // marka
+    // marka — yalnız slug ile eşleşir
     let marka = "";
     const markaHam = metin(veri.marka);
     if (!markaHam) hatalar.push("Marka boş (zorunlu)");
     else {
-      const bulunan = markaHarita.get(anahtarla(markaHam));
+      const bulunan = markaHarita.get(slugNorm(markaHam));
       if (!bulunan) hatalar.push(`Bilinmeyen marka: "${markaHam}"`);
       else marka = bulunan;
     }
 
-    // kategori
+    // kategori — yalnız slug ile eşleşir
     let kategori = "";
     const katHam = metin(veri.kategori);
     if (!katHam) hatalar.push("Kategori boş (zorunlu)");
     else {
-      const bulunan = kategoriHarita.get(anahtarla(katHam));
+      const bulunan = kategoriHarita.get(slugNorm(katHam));
       if (!bulunan) hatalar.push(`Bilinmeyen kategori: "${katHam}"`);
       else kategori = bulunan;
     }
@@ -318,42 +284,13 @@ export function dogrula(ham: HamSatir[], baglam: Baglam): Rapor {
     const adTr = metin(veri.ad_tr);
     if (!adTr) hatalar.push("Ad (TR) boş (zorunlu)");
 
-    // stok
-    let stokDurumu: UrunVeri["stokDurumu"] | "" = "";
+    // stok — boşsa "stokta" (şema varsayılanı), geçersizse hata
+    let stokDurumu: UrunVeri["stokDurumu"] = "stokta";
     const stokHam = metin(veri.stokDurumu);
-    if (!stokHam) hatalar.push("Stok Durumu boş (zorunlu)");
-    else {
+    if (stokHam) {
       const s = STOK_ESLEME[stokHam.toLowerCase()];
       if (!s) hatalar.push(`Geçersiz Stok Durumu: "${stokHam}" (Stokta / Siparişe bağlı / Tükendi)`);
       else stokDurumu = s;
-    }
-
-    // durum
-    let durum: UrunVeri["durum"] | "" = "";
-    const durumHam = metin(veri.durum);
-    if (!durumHam) hatalar.push("Durum boş (zorunlu)");
-    else {
-      const d = DURUM_ESLEME[durumHam.toLowerCase()];
-      if (!d) hatalar.push(`Geçersiz Durum: "${durumHam}" (Orijinal / Muadil / Revizyonlu)`);
-      else durum = d;
-    }
-
-    // fiyat
-    let fiyat: number | undefined;
-    const fiyatHam = metin(veri.fiyat);
-    if (fiyatHam) {
-      const sayi = Number(fiyatHam.replace(/\s/g, "").replace(",", "."));
-      if (isNaN(sayi) || sayi < 0) hatalar.push(`Geçersiz Fiyat: "${fiyatHam}"`);
-      else fiyat = sayi;
-    }
-
-    // para birimi
-    let paraBirimi: UrunVeri["paraBirimi"] | undefined;
-    const paraHam = metin(veri.paraBirimi);
-    if (paraHam) {
-      const p = PARA_ESLEME[paraHam.toLowerCase()];
-      if (!p) hatalar.push(`Geçersiz Para Birimi: "${paraHam}" (TRY / USD / EUR)`);
-      else paraBirimi = p;
     }
 
     // booleans
@@ -361,10 +298,6 @@ export function dogrula(ham: HamSatir[], baglam: Baglam): Rapor {
     if (one.hata) hatalar.push(`Öne Çıkan: ${one.hata}`);
     const yay = boolCoz(veri.yayinda, true);
     if (yay.hata) hatalar.push(`Yayında: ${yay.hata}`);
-
-    // tarih
-    const tarih = tarihCoz(veri.eklenmeTarihi);
-    if (tarih.hata) hatalar.push(`Eklenme Tarihi: ${tarih.hata}`);
 
     // ad/açıklama çevrileri
     const ad: Cevrilebilir = { tr: adTr };
@@ -394,16 +327,23 @@ export function dogrula(ham: HamSatir[], baglam: Baglam): Rapor {
       marka,
       kategori,
       uyumluMotorlar: listeAyir(veri.uyumluMotorlar),
-      stokDurumu: stokDurumu as UrunVeri["stokDurumu"],
-      durum: durum as UrunVeri["durum"],
-      ...(fiyat !== undefined ? { fiyat } : {}),
-      ...(paraBirimi ? { paraBirimi } : {}),
+      stokDurumu,
       oneCikan: one.deger,
       yayinda: yay.deger,
-      eklenmeTarihi: tarih.deger!,
       ad,
       ...(aciklama ? { aciklama } : {}),
     };
+    // Aynı ürün mü? Kimlik = parça no + marka + kategori + Türkçe ad. Farklı
+    // ürünler zaten TR adında ayrışır; yalnız İngilizce ad/motor gibi ikincil
+    // alanlarda farklılık "sehven kopya" sayılır ve atlanır (ilk satır kazanır).
+    const adTrNorm = adTr.trim().toLowerCase().replace(/\s+/g, " ");
+    const imza = JSON.stringify({ p: nAnahtar, m: marka, k: kategori, ad: adTrNorm });
+    if (imzalar.has(imza)) {
+      satirlar.push({ satir, parcaNo, islem: "kopya", hatalar: [] });
+      continue;
+    }
+    imzalar.add(imza);
+
     const islem: Islem = mevcutSet.has(nAnahtar) ? "guncelleme" : "yeni";
     satirlar.push({ satir, parcaNo, islem, hatalar: [], urun });
   }
@@ -414,6 +354,7 @@ export function dogrula(ham: HamSatir[], baglam: Baglam): Rapor {
     yeni: satirlar.filter((s) => s.islem === "yeni").length,
     guncelleme: satirlar.filter((s) => s.islem === "guncelleme").length,
     hatali: satirlar.filter((s) => s.islem === "hata").length,
+    kopya: satirlar.filter((s) => s.islem === "kopya").length,
     satirlar,
     gecerliUrunler,
   };
@@ -426,14 +367,17 @@ export async function disaAktar(urunler: UrunVeri[]): Promise<ArrayBuffer> {
   const wb = new ExcelJS.Workbook();
   wb.creator = "Pekparts Panel";
   const ws = wb.addWorksheet("Ürünler");
-  ws.columns = SUTUNLAR.map((s) => ({ header: s.baslik, key: s.anahtar, width: 18 }));
+  ws.columns = SUTUNLAR.map((s) => ({
+    header: s.baslik,
+    key: s.anahtar,
+    width: 18,
+    style:
+      s.anahtar === "parcaNo" || s.anahtar === "muadilNo" ? { numFmt: "@" } : undefined,
+  }));
   ws.getRow(1).font = { bold: true };
 
   const stokEtiket: Record<string, string> = {
     stokta: "Stokta", "siparise-bagli": "Siparişe bağlı", tukendi: "Tükendi",
-  };
-  const durumEtiket: Record<string, string> = {
-    orijinal: "Orijinal", muadil: "Muadil", revizyonlu: "Revizyonlu",
   };
 
   for (const u of urunler) {
@@ -444,12 +388,8 @@ export async function disaAktar(urunler: UrunVeri[]): Promise<ArrayBuffer> {
       kategori: u.kategori,
       uyumluMotorlar: u.uyumluMotorlar.join(", "),
       stokDurumu: stokEtiket[u.stokDurumu] ?? u.stokDurumu,
-      durum: durumEtiket[u.durum] ?? u.durum,
-      fiyat: u.fiyat ?? "",
-      paraBirimi: u.paraBirimi ?? "",
       oneCikan: u.oneCikan ? "Evet" : "Hayır",
       yayinda: u.yayinda ? "Evet" : "Hayır",
-      eklenmeTarihi: u.eklenmeTarihi,
       ad_tr: u.ad.tr,
       ad_en: u.ad.en ?? "",
       ad_ar: u.ad.ar ?? "",

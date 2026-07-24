@@ -1,0 +1,24 @@
+{
+  "parcaNo": "320/04133",
+  "muadilNo": [
+    "32004133"
+  ],
+  "marka": "mahle",
+  "kategori": "filtreler",
+  "uyumluMotorlar": [
+    "JCB 3CX",
+    "JCB 4CX"
+  ],
+  "stokDurumu": "stokta",
+  "gorseller": [
+    {
+      "dosya": "320-04133-1.jpg"
+    }
+  ],
+  "oneCikan": false,
+  "yayinda": true,
+  "ad": {
+    "tr": "Mahle yağ filtresi",
+    "en": "Mahle oil filter"
+  }
+}

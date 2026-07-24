@@ -1,0 +1,31 @@
+{
+  "parcaNo": "TCD2012L04-REV",
+  "muadilNo": [],
+  "marka": "deutz",
+  "kategori": "diger",
+  "uyumluMotorlar": [
+    "TCD 2012 L04"
+  ],
+  "stokDurumu": "siparise-bagli",
+  "gorseller": [
+    {
+      "dosya": "tcd2012l04-1.jpg"
+    },
+    {
+      "dosya": "tcd2012l04-2.jpg"
+    },
+    {
+      "dosya": "tcd2012l04-3.jpg"
+    }
+  ],
+  "oneCikan": true,
+  "yayinda": true,
+  "ad": {
+    "tr": "Deutz TCD 2012 L04 komple motor — test edilmiş, garantili, montaja hazır teslim",
+    "en": "Deutz TCD 2012 L04 complete engine — tested, warranted, ready for installation"
+  },
+  "aciklama": {
+    "tr": "Test edilmiş komple motor. 6 ay garantilidir.",
+    "en": "Tested complete engine. 6-month warranty."
+  }
+}
