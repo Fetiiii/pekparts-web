@@ -12,8 +12,8 @@ const dataset = process.env.SANITY_STUDIO_DATASET ?? "production";
 export default defineConfig({
   name: "pekparts",
   title: "Pekparts Yönetim Paneli",
-  projectId,
-  dataset,
+  projectId: 'r15jbggr',
+  dataset: 'production',
 
   plugins: [
     structureTool({

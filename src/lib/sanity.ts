@@ -9,8 +9,8 @@ function env(ad: string): string | undefined {
   return (import.meta.env as Record<string, string | undefined>)[ad] ?? process.env[ad];
 }
 
-const projectId = env("SANITY_PROJECT_ID");
-const dataset = env("SANITY_DATASET") ?? "production";
+const projectId = env("PUBLIC_SANITY_PROJECT_ID");
+const dataset = env("PUBLIC_SANITY_DATASET") ?? "production";
 
 /** Sanity yapılandırılmış mı? (proje ID var mı) */
 export function sanityYapili(): boolean {
