@@ -1,6 +1,6 @@
 // teklif-core testi — fetch taklitlenir; honeypot/KVKK/zorunlu/oran/e-posta.
 // Çalıştır: node --experimental-strip-types teklif-core.test.ts
-import { teklifIsle, type TeklifConfig } from "./teklif-core.ts";
+import { teklifIsle, type TeklifConfig } from "../netlify/functions/lib/teklif-core.ts";
 
 let gecti = 0, kaldi = 0;
 const ok = (k: boolean, ad: string, ek = "") =>

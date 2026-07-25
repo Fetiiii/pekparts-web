@@ -13,7 +13,7 @@ const p410 = join(kok, "dist", "410", "index.html");
 const html410 = existsSync(p410) ? readFileSync(p410, "utf8") : "<h1>410</h1>";
 globalThis.fetch = async () => new Response(html410, { status: 200 });
 
-const { default: edge } = await import("./eski-url.ts");
+const { default: edge } = await import("../netlify/edge-functions/eski-url.ts");
 const ctx = { next: () => ({ __gecti: true }) };
 const istek = (yol) => new Request(`https://pekparts.com${yol}`);
 

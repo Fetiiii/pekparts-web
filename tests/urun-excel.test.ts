@@ -4,7 +4,7 @@
 // marka/kategori, string parça no, stok default. 300+ satır.
 // Çalıştır: node --experimental-strip-types lib/urun-excel.test.ts
 import ExcelJS from "exceljs";
-import { SUTUNLAR, ayristir, dogrula, disaAktar, sablonUret, type Baglam } from "./urun-excel.ts";
+import { SUTUNLAR, ayristir, dogrula, disaAktar, sablonUret, type Baglam } from "../studio/lib/urun-excel.ts";
 
 let gecti = 0, kaldi = 0;
 const ok = (k, ad, ek = "") =>

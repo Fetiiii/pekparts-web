@@ -1,6 +1,6 @@
 // Eski URL karar mantığı testi (yerel). §11: 301 / 410 / geçir.
 // Çalıştır: node --experimental-strip-types eski-url-karar.test.ts
-import { eskiUrlKarari } from "./eski-url-karar.ts";
+import { eskiUrlKarari } from "../netlify/edge-functions/lib/eski-url-karar.ts";
 
 let gecti = 0, kaldi = 0;
 function esit(yol: string, bekle: string, ek = "") {
