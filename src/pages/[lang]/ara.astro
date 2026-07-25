@@ -2,12 +2,12 @@
 import Layout from "@/layouts/Layout.astro";
 import SearchBox from "@/components/SearchBox.astro";
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { getAyarlar } from "@/lib/ayarlar";
 import { markaAdi } from "@/lib/katalog";
 
 export function getStaticPaths() {
-  return diller.map((lang) => ({ params: { lang } }));
+  return aktifDiller.map((lang) => ({ params: { lang } }));
 }
 
 const aktifDil = Astro.params.lang as Dil;

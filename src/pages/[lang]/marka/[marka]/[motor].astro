@@ -2,12 +2,12 @@
 import Layout from "@/layouts/Layout.astro";
 import UrunListe from "@/components/UrunListe.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { tumUrunler, markaMotorCiftleri, markaAdi } from "@/lib/katalog";
 
 export async function getStaticPaths() {
   const ciftler = await markaMotorCiftleri();
-  return diller.flatMap((lang) =>
+  return aktifDiller.flatMap((lang) =>
     ciftler.map((c) => ({
       params: { lang, marka: c.markaSlug, motor: c.motor.slug },
     })),

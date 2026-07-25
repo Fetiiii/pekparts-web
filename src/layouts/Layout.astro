@@ -13,7 +13,7 @@ import "@fontsource/ibm-plex-sans-arabic/400.css";
 import "@fontsource/ibm-plex-sans-arabic/600.css";
 
 import { dilBul, ceviriYap, yolunGerisi, yon } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { marka } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
 import TopBar from "@/components/TopBar.astro";
@@ -66,7 +66,7 @@ const indexlenebilir =
     {!indexlenebilir && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- hreflang — Şartname §7/§11. Her dil + x-default (varsayılan dil: en). -->
-    {diller.map((d) => <link rel="alternate" hreflang={d} href={altUrl(d)} />)}
+    {aktifDiller.map((d) => <link rel="alternate" hreflang={d} href={altUrl(d)} />)}
     <link rel="alternate" hreflang="x-default" href={altUrl("en")} />
 
     <!-- Open Graph — WhatsApp'ta link önizlemesi için (§11). -->

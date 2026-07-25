@@ -14,8 +14,9 @@ export default defineConfig({
   trailingSlash: "always",
   i18n: {
     // Varsayılan dil İngilizce (iş kararı). Yol segmentleri değişmez (urun/marka).
+    // ar/ru şimdilik ASKIDA — yalnızca yayındaki diller (bkz. ui.ts aktifDiller).
     defaultLocale: "en",
-    locales: ["en", "tr", "ar", "ru"],
+    locales: ["en", "tr"],
     routing: {
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
@@ -30,7 +31,7 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: "en",
-        locales: { en: "en", tr: "tr", ar: "ar", ru: "ru" },
+        locales: { en: "en", tr: "tr" },
       },
       // Hata sayfaları (404/410) ve eski spam URL'leri sitemap'te olmaz.
       filter: (sayfa) => !/\/(404|410)\/?$/.test(sayfa),

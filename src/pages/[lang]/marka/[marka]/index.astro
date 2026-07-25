@@ -2,13 +2,13 @@
 import Layout from "@/layouts/Layout.astro";
 import UrunListe from "@/components/UrunListe.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { tumUrunler, markaAdi } from "@/lib/katalog";
 
 export async function getStaticPaths() {
   const urunler = await tumUrunler();
   const markalar = [...new Set(urunler.map((u) => u.markaSlug))];
-  return diller.flatMap((lang) =>
+  return aktifDiller.flatMap((lang) =>
     markalar.map((marka) => ({ params: { lang, marka } })),
   );
 }

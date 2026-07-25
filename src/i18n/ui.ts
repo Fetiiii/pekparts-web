@@ -10,6 +10,12 @@
 export const diller = ["tr", "en", "ar", "ru"] as const;
 export type Dil = (typeof diller)[number];
 
+// YAYINDAKİ diller: sayfalar yalnızca bunlar için üretilir, dil seçicide ve
+// hreflang/sitemap'te yalnızca bunlar görünür. ar/ru şimdilik ASKIDA (çeviri
+// gelince buraya eklenir — ör. ["en", "tr", "ar", "ru"]). `diller` ise tip ve
+// içerik çevirileri (Sanity'deki ad.ar/ad.ru) için tam kümedir; ona dokunma.
+export const aktifDiller: readonly Dil[] = ["en", "tr"];
+
 export const varsayilanDil: Dil = "en";
 export const rtlDiller: readonly Dil[] = ["ar"];
 

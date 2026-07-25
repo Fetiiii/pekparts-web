@@ -2,12 +2,12 @@
 import Layout from "@/layouts/Layout.astro";
 import TeklifForm from "@/components/TeklifForm.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { telLink, whatsappLink } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
 
 export function getStaticPaths() {
-  return diller.map((lang) => ({ params: { lang } }));
+  return aktifDiller.map((lang) => ({ params: { lang } }));
 }
 const aktifDil = Astro.params.lang as Dil;
 const t = ceviriYap(aktifDil);

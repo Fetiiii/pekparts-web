@@ -1,5 +1,5 @@
 ---
-import { dilAdlari, diller, type Dil } from "@/i18n/ui";
+import { dilAdlari, aktifDiller, type Dil } from "@/i18n/ui";
 import { ceviriYap, yolunGerisi, dilliYol } from "@/i18n/utils";
 
 interface Props {
@@ -26,7 +26,7 @@ const kalan = yolunGerisi(url); // dil öneki soyulmuş yol
     role="list"
   >
     {
-      diller.map((d) => {
+      aktifDiller.map((d) => {
         const hedef = dilliYol(d, kalan); // sonda slash (trailingSlash: "always")
         const secili = d === aktifDil;
         return (

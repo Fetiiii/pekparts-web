@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Rozet from "@/components/Rozet.astro";
 import TeklifForm from "@/components/TeklifForm.astro";
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
-import { diller } from "@/i18n/ui";
+import { aktifDiller } from "@/i18n/ui";
 import { tumUrunler, yerelDeger, markaAdi } from "@/lib/katalog";
 import { whatsappLink } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
@@ -11,7 +11,7 @@ import WhatsAppSor from "@/components/WhatsAppSor.astro";
 
 export async function getStaticPaths() {
   const urunler = await tumUrunler();
-  return diller.flatMap((lang) =>
+  return aktifDiller.flatMap((lang) =>
     urunler.map((u) => ({ params: { lang, parcaNo: u.slug } })),
   );
 }
