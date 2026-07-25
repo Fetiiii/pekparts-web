@@ -5,7 +5,7 @@ import TeklifForm from "@/components/TeklifForm.astro";
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
 import { tumUrunler, yerelDeger, markaAdi } from "@/lib/katalog";
-import { marka, whatsappLink } from "@/site";
+import { whatsappLink } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
 import WhatsAppSor from "@/components/WhatsAppSor.astro";
 
@@ -58,12 +58,9 @@ const gorseller = urun.gorseller
     alt: g.alt ? yerelDeger(g.alt, aktifDil) : t("urun.gorselAcilim", { ad, no: urun.parcaNo }),
   }));
 
-// schema.org Product — fiyat YOK (§5); availability + itemCondition + marka.
-const stokHarita: Record<string, string> = {
-  stokta: "https://schema.org/InStock",
-  "siparise-bagli": "https://schema.org/PreOrder",
-  tukendi: "https://schema.org/OutOfStock",
-};
+// schema.org Product — fiyat GÖSTERİLMİYOR (§5). `offers` bloğu tümüyle
+// kaldırıldı: schema.org'da `availability` yalnızca `offers` altında geçerli ve
+// fiyatsız Offer bırakmak istemiyoruz. Stok bilgisi sayfada rozet olarak var.
 const kanonik = new URL(dilliYol(aktifDil, `urun/${urun.slug}`), Astro.site).href;
 const jsonLd = {
   "@context": "https://schema.org",
@@ -77,15 +74,6 @@ const jsonLd = {
   ...(gorseller.length
     ? { image: gorseller.map((g) => new URL(g.yol, Astro.site).href) }
     : {}),
-  offers: {
-    "@type": "Offer",
-    availability: stokHarita[urun.stokDurumu],
-    // "durum" alanı kaldırıldı; tüm ürünler orijinal → NewCondition.
-    itemCondition: "https://schema.org/NewCondition",
-    url: kanonik,
-    // Fiyat YOK (§5) — yalnız availability + satıcı.
-    seller: { "@type": "Organization", name: marka.ad },
-  },
 };
 ---
 
