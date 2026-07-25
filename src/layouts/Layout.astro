@@ -24,6 +24,8 @@ import WhatsAppButton from "@/components/WhatsAppButton.astro";
 interface Props {
   baslik?: string;
   aciklama?: string;
+  ogGorsel?: string; // WhatsApp/OG önizleme görseli (ürün sayfasında ilk görsel)
+  ogTip?: string; // "website" | "product" vb.
 }
 
 const aktifDil = dilBul(Astro.url);
@@ -31,15 +33,22 @@ const t = ceviriYap(aktifDil);
 const dir = yon(aktifDil);
 const ayarlar = await getAyarlar();
 
-const { baslik, aciklama } = Astro.props;
+const { baslik, aciklama, ogGorsel, ogTip = "website" } = Astro.props;
 const sayfaBaslik = baslik ? `${baslik} · ${marka.ad}` : `${marka.ad} — ${marka.unvan}`;
 const sayfaAciklama = aciklama ?? t("site.aciklama");
+// OG görseli: ürün sayfasında ilk görsel (Sanity CDN). Site geneli varsayılan
+// görsel firmadan gelince eklenir — yoksa og:image atlanır.
+const ogMutlak = ogGorsel ? new URL(ogGorsel, Astro.site).href : null;
 
-// hreflang: her dil için, dil öneki soyulmuş yol üzerinden mutlak URL.
+// hreflang: her dil için, dil öneki soyulmuş yol üzerinden mutlak URL (sonda /).
 const kalanYol = yolunGerisi(Astro.url); // öneksiz yol
 const altUrl = (d: string) =>
-  new URL(kalanYol ? `/${d}/${kalanYol}` : `/${d}/`, Astro.site).href;
+  new URL(kalanYol ? `/${d}/${kalanYol}/` : `/${d}/`, Astro.site).href;
 const kanonik = altUrl(aktifDil);
+
+// Yayın anahtarı: PUBLIC_SITE_INDEXABLE=true olana kadar noindex (§11/§7 yayın).
+const indexlenebilir =
+  (import.meta.env.PUBLIC_SITE_INDEXABLE ?? process.env.PUBLIC_SITE_INDEXABLE) === "true";
 ---
 
 <!doctype html>
@@ -53,17 +62,22 @@ const kanonik = altUrl(aktifDil);
     <meta name="description" content={sayfaAciklama} />
     <link rel="canonical" href={kanonik} />
 
-    <!-- hreflang — Şartname §7/§11. Her dil + x-default (varsayılan dile). -->
+    {/* Yayına kadar indekslenmeyi engelle (§7 yayın anahtarı). */}
+    {!indexlenebilir && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- hreflang — Şartname §7/§11. Her dil + x-default (varsayılan dil: en). -->
     {diller.map((d) => <link rel="alternate" hreflang={d} href={altUrl(d)} />)}
-    <link rel="alternate" hreflang="x-default" href={altUrl("tr")} />
+    <link rel="alternate" hreflang="x-default" href={altUrl("en")} />
 
     <!-- Open Graph — WhatsApp'ta link önizlemesi için (§11). -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogTip} />
     <meta property="og:site_name" content={marka.ad} />
     <meta property="og:title" content={sayfaBaslik} />
     <meta property="og:description" content={sayfaAciklama} />
     <meta property="og:url" content={kanonik} />
     <meta property="og:locale" content={aktifDil} />
+    {ogMutlak && <meta property="og:image" content={ogMutlak} />}
+    {ogMutlak && <meta name="twitter:card" content="summary_large_image" />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     

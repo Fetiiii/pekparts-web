@@ -30,6 +30,7 @@ export const GET: APIRoute = async () => {
       motorOzet: u.motorlar.slice(0, 3).map((m) => m.ad),
       motorFazla: Math.max(0, u.motorlar.length - 3),
       stok: u.stokDurumu,
+      gorsel: u.gorseller.find((g) => g.url)?.url ?? null, // kapak (arama kartı için)
       anahtarlar: [...anahtarlar],
       metin: [...metin],
     };

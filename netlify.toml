@@ -1,5 +1,6 @@
 # Netlify yapılandırması. Ortam değişkenleri (SANITY_*, RESEND_API_KEY, CANLI=1,
-# TEKLIF_FROM, TALEP_EPOSTA, SANITY_WRITE_TOKEN) Netlify panelinden girilir.
+# PUBLIC_SITE_INDEXABLE, TEKLIF_FROM, TALEP_EPOSTA, SANITY_WRITE_TOKEN) Netlify
+# panelinden girilir. Deploy Aşama sonrası; şimdilik yalnız yerel.
 [build]
   command = "npm run build"
   publish = "dist"
@@ -8,13 +9,34 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Edge functions (netlify/edge-functions/) otomatik keşfedilir; eski-url.ts
+# kendi `config.path = "/*"` bildirimiyle kayıtlıdır (eski URL 301/410 geçişi).
 
+# Kök URL → varsayılan dil (İngilizce), sunucu seviyesinde 301.
+[[redirects]]
+  from = "/"
+  to = "/en/"
+  status = 301
+  force = true
+
+# ————————————————————————————————————————————————
+# Güvenlik başlıkları (§5)
+# ————————————————————————————————————————————————
 [[headers]]
   for = "/*"
-
   [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    # YAYIN GÜNÜ: aşağıdaki X-Robots-Tag satırı SİLİNECEK (indekslemeyi açmak için).
     X-Robots-Tag = "noindex, nofollow"
+    # CSP — 'self' + Sanity görsel CDN'i + Google Haritalar iframe'i.
+    # script/style inline: Astro satır içi modül scriptleri için gerekli.
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https://cdn.sanity.io; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
 
-# Sanity webhook → yeniden derleme: Netlify'da "Build hooks" ile oluşturulan
-# URL, Sanity proje ayarlarında (API → Webhooks) POST hedefi olarak tanımlanır.
-# Böylece panelde kaydedilen değişiklik birkaç dakika içinde siteye yansır.
+# Fontlar ve statik varlıklar uzun önbellek (içerik hash'li).
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

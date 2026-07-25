@@ -1,10 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import SearchBox from "@/components/SearchBox.astro";
-import { ceviriYap, type Dil } from "@/i18n/utils";
+import UrunKart from "@/components/UrunKart.astro";
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
-import { whatsappLink } from "@/site";
+import { whatsappLink, marka } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
+import { tumUrunler, yerelDeger } from "@/lib/katalog";
 
 export function getStaticPaths() {
   return diller.map((lang) => ({ params: { lang } }));
@@ -13,16 +15,50 @@ export function getStaticPaths() {
 const aktifDil = Astro.params.lang as Dil;
 const t = ceviriYap(aktifDil);
 const ayarlar = await getAyarlar();
+
+// Ana sayfa verisi katalogdan türetilir (§4): yalnızca ürünü olan kategori/marka.
+const urunler = await tumUrunler();
+
+const katMap = new Map<string, { slug: string; ad: any; sayi: number }>();
+for (const u of urunler) {
+  const e = katMap.get(u.kategoriSlug);
+  if (e) e.sayi++;
+  else katMap.set(u.kategoriSlug, { slug: u.kategoriSlug, ad: u.kategoriAd, sayi: 1 });
+}
+const kategoriler = [...katMap.values()].sort((a, b) => b.sayi - a.sayi);
+
+const markaMap = new Map<string, { slug: string; ad: string; sayi: number }>();
+for (const u of urunler) {
+  const e = markaMap.get(u.markaSlug);
+  if (e) e.sayi++;
+  else markaMap.set(u.markaSlug, { slug: u.markaSlug, ad: u.markaAd, sayi: 1 });
+}
+const markalar = [...markaMap.values()].sort((a, b) => b.sayi - a.sayi);
+
+// Öne çıkan 8: tumUrunler zaten oneCikan-first sıralı; ilk 8'i al.
+const oneCikanlar = urunler.slice(0, 8);
+
+// schema.org LocalBusiness — firma bilgisi (§11).
+const isletmeLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: marka.unvan,
+  alternateName: marka.ad,
+  url: new URL(`/${aktifDil}/`, Astro.site).href,
+  telephone: ayarlar.telefon,
+  email: ayarlar.eposta,
+  address: { "@type": "PostalAddress", streetAddress: ayarlar.adres, addressCountry: "TR" },
+  ...(ayarlar.calismaSaatleri ? { openingHours: ayarlar.calismaSaatleri } : {}),
+  description: t("site.aciklama"),
+};
 ---
 
 <Layout>
-  <!-- Hero: sayfanın odağı büyük parça numarası arama kutusu (§4). -->
+  <!-- Hero: sayfanın odağı büyük parça numarası arama kutusu (§4.3). -->
   <section class="border-b border-kenarlik bg-yuzey">
     <div class="mx-auto max-w-6xl px-4 py-14 sm:py-20">
       <div class="max-w-2xl">
-        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-          {t("hero.baslik")}
-        </h1>
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{t("hero.baslik")}</h1>
         <p class="mt-4 text-lg text-murekkep/75">{t("hero.altbaslik")}</p>
         <div class="mt-8 max-w-xl">
           <SearchBox aktifDil={aktifDil} buyuk />
@@ -31,12 +67,83 @@ const ayarlar = await getAyarlar();
     </div>
   </section>
 
-  <!-- Aşama 1: katalog bölümleri (kategoriler, öne çıkanlar) Aşama 2'de
-       içerik sisteminden gelecek. Şimdilik dürüst bir yer tutucu. -->
-  <section class="mx-auto max-w-6xl px-4 py-14">
-    <div class="rounded border border-kenarlik bg-kagit p-8 text-center">
-      <h2 class="text-xl font-semibold">{t("yapim.baslik")}</h2>
-      <p class="mx-auto mt-3 max-w-md text-murekkep/70">{t("yapim.metin")}</p>
+  <!-- Kategoriler (§4.4) -->
+  {
+    kategoriler.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-12">
+        <h2 class="mb-5 text-xl font-semibold tracking-tight">{t("home.kategoriler")}</h2>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {kategoriler.map((k) => (
+            <a
+              href={dilliYol(aktifDil, `urunler/${k.slug}`)}
+              class="flex items-center justify-between gap-2 rounded border border-kenarlik bg-kagit px-4 py-3 text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
+            >
+              <span class="font-medium">{yerelDeger(k.ad, aktifDil)}</span>
+              <span class="parca-no shrink-0 text-xs text-murekkep/50">{k.sayi}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Markaya göre gözat (§4.5) -->
+  {
+    markalar.length > 0 && (
+      <section class="border-t border-kenarlik bg-yuzey">
+        <div class="mx-auto max-w-6xl px-4 py-12">
+          <h2 class="mb-5 text-xl font-semibold tracking-tight">{t("home.markalar")}</h2>
+          <ul class="flex flex-wrap gap-2">
+            {markalar.map((m) => (
+              <li>
+                <a
+                  href={dilliYol(aktifDil, `marka/${m.slug}`)}
+                  class="inline-flex items-center gap-1.5 rounded border border-kenarlik bg-kagit px-3 py-1.5 text-sm text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
+                >
+                  {m.ad}
+                  <span class="parca-no text-xs text-murekkep/45">{m.sayi}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Öne çıkan ürünler (§4.6) -->
+  {
+    oneCikanlar.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 py-12">
+        <div class="mb-5 flex items-center justify-between gap-4">
+          <h2 class="text-xl font-semibold tracking-tight">{t("home.oneCikan")}</h2>
+          <a
+            href={dilliYol(aktifDil, "urunler")}
+            class="shrink-0 text-sm font-medium text-vurgu hover:underline"
+          >
+            {t("home.tumunuGor")} →
+          </a>
+        </div>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {oneCikanlar.map((u) => (
+            <UrunKart urun={u} aktifDil={aktifDil} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Kısa firma tanıtımı (§4.7 — tesis fotoğrafı sonra) -->
+  <section class="border-t border-kenarlik bg-yuzey">
+    <div class="mx-auto max-w-3xl px-4 py-12">
+      <h2 class="text-xl font-semibold tracking-tight">{t("home.hakkindaBaslik")}</h2>
+      <p class="mt-3 text-murekkep/80">{t("home.hakkindaMetin")}</p>
+      <a
+        href={dilliYol(aktifDil, "hakkimizda")}
+        class="mt-4 inline-block text-sm font-medium text-vurgu hover:underline"
+      >
+        {t("home.hakkindaBag")} →
+      </a>
     </div>
   </section>
 
@@ -58,4 +165,6 @@ const ayarlar = await getAyarlar();
       </a>
     </div>
   </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(isletmeLd)} />
 </Layout>

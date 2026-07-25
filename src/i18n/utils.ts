@@ -23,10 +23,11 @@ export function ceviriYap(dil: Dil) {
   };
 }
 
-/** Bir yolu belirtilen dilin önekiyle üretir. `/urunler` → `/en/urunler`. */
+/** Bir yolu belirtilen dilin önekiyle, sonda slash ile üretir.
+ *  `urunler` → `/en/urunler/`. (trailingSlash: "always" ile tutarlı.) */
 export function dilliYol(dil: Dil, yol = ""): string {
-  const temiz = yol.replace(/^\/+/, "");
-  return temiz ? `/${dil}/${temiz}` : `/${dil}/`;
+  const temiz = yol.replace(/^\/+/, "").replace(/\/+$/, "");
+  return temiz ? `/${dil}/${temiz}/` : `/${dil}/`;
 }
 
 /** Aktif URL'nin dil önekini soyup geriye kalan yolu verir (dil değiştirici için). */

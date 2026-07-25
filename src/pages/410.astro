@@ -1,0 +1,29 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SearchBox from "@/components/SearchBox.astro";
+import { ceviriYap } from "@/i18n/utils";
+import { varsayilanDil } from "@/i18n/ui";
+
+// 410 Gone sayfası (§11). Edge function eski spam URL'lerini bu sayfanın
+// içeriğiyle 410 durumunda sunar. Boş-arama mantığı: kullanıcıyı kaybetme.
+const dil = varsayilanDil; // en
+const t = ceviriYap(dil);
+const tTr = ceviriYap("tr");
+---
+
+<Layout baslik={t("410.baslik")}>
+  <section class="mx-auto max-w-2xl px-4 py-16 text-center">
+    <p class="parca-no text-4xl font-bold text-bakir-koyu">410</p>
+    <h1 class="mt-3 text-2xl font-bold tracking-tight">{t("410.baslik")}</h1>
+    <p class="mx-auto mt-3 max-w-md text-murekkep/75">{t("410.metin")}</p>
+    <p class="mx-auto mt-1 max-w-md text-sm text-murekkep/55">{tTr("410.metin")}</p>
+
+    <div class="mx-auto mt-8 max-w-md">
+      <SearchBox aktifDil={dil} buyuk />
+    </div>
+
+    <p class="mt-6">
+      <a href={`/${dil}/`} class="text-vurgu hover:underline">{t("404.anasayfa")}</a>
+    </p>
+  </section>
+</Layout>

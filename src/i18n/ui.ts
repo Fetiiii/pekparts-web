@@ -10,7 +10,7 @@
 export const diller = ["tr", "en", "ar", "ru"] as const;
 export type Dil = (typeof diller)[number];
 
-export const varsayilanDil: Dil = "tr";
+export const varsayilanDil: Dil = "en";
 export const rtlDiller: readonly Dil[] = ["ar"];
 
 // Dil seçicide gösterilen adlar — BAYRAK DEĞİL, dilin kendi adı (endonim).
@@ -63,6 +63,16 @@ const tr: UISozluk = {
   "iletisim.baslik": "Parça mı arıyorsunuz?",
   "iletisim.metin":
     "Parça numarasını veya fotoğrafı gönderin, stok durumunu aynı gün kontrol edelim.",
+
+  // Ana sayfa bölümleri (§4)
+  "home.kategoriler": "Kategoriler",
+  "home.markalar": "Markaya göre gözat",
+  "home.oneCikan": "Öne çıkan ürünler",
+  "home.tumunuGor": "Tümünü gör",
+  "home.hakkindaBaslik": "Pekparts hakkında",
+  "home.hakkindaMetin":
+    "İş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça tedarik ediyoruz — başta Deutz olmak üzere. Parça numarasıyla arayın, stok durumunu aynı gün paylaşalım.",
+  "home.hakkindaBag": "Daha fazla bilgi",
 
   "footer.hakkinda": "Kurumsal",
   "footer.iletisim": "İletişim",
@@ -148,6 +158,11 @@ const tr: UISozluk = {
   "404.metin":
     "Aradığınız sayfa taşınmış veya kaldırılmış olabilir. Aradığınız parçayı numarasıyla bulun ya da WhatsApp'tan sorun.",
   "404.anasayfa": "Ana sayfaya dön",
+
+  // 410 (kalıcı olarak kaldırılmış eski sayfalar)
+  "410.baslik": "Bu sayfa artık mevcut değil",
+  "410.metin":
+    "Eski sitemizin bu sayfası kaldırıldı. Aradığınız parçayı numarasıyla bulun ya da WhatsApp'tan sorun — yardımcı olalım.",
 };
 
 const en: UISozluk = {
@@ -189,6 +204,16 @@ const en: UISozluk = {
   "iletisim.baslik": "Looking for a part?",
   "iletisim.metin":
     "Send the part number or a photo and we will check availability the same day.",
+
+  // Home page sections (§4)
+  "home.kategoriler": "Categories",
+  "home.markalar": "Browse by brand",
+  "home.oneCikan": "Featured products",
+  "home.tumunuGor": "View all",
+  "home.hakkindaBaslik": "About Pekparts",
+  "home.hakkindaMetin":
+    "We supply spare parts for construction machinery, generator, tractor and bus engines — Deutz above all. Search by part number and we'll share stock status the same day.",
+  "home.hakkindaBag": "Learn more",
 
   "footer.hakkinda": "Company",
   "footer.iletisim": "Contact",
@@ -274,6 +299,11 @@ const en: UISozluk = {
   "404.metin":
     "The page you're looking for may have moved or been removed. Find your part by its number, or ask us on WhatsApp.",
   "404.anasayfa": "Back to home",
+
+  // 410 (permanently removed old pages)
+  "410.baslik": "This page is no longer available",
+  "410.metin":
+    "This page from our old site has been removed. Find the part you need by its number, or ask us on WhatsApp — we'll help.",
 };
 
 // İSKELET — çevirmen doldurana kadar boş. t() İngilizce'ye düşer.

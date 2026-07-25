@@ -1,0 +1,43 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
+import { diller } from "@/i18n/ui";
+import { tumUrunler } from "@/lib/katalog";
+
+export function getStaticPaths() {
+  return diller.map((lang) => ({ params: { lang } }));
+}
+
+const aktifDil = Astro.params.lang as Dil;
+const t = ceviriYap(aktifDil);
+
+// Yalnızca ürünü olan markalar, ürün sayısıyla (çoktan aza).
+const urunler = await tumUrunler();
+const markaMap = new Map<string, { slug: string; ad: string; sayi: number }>();
+for (const u of urunler) {
+  const e = markaMap.get(u.markaSlug);
+  if (e) e.sayi++;
+  else markaMap.set(u.markaSlug, { slug: u.markaSlug, ad: u.markaAd, sayi: 1 });
+}
+const markalar = [...markaMap.values()].sort((a, b) => b.sayi - a.sayi);
+---
+
+<Layout baslik={t("nav.markalar")}>
+  <section class="mx-auto max-w-6xl px-4 py-8">
+    <h1 class="text-2xl font-bold tracking-tight">{t("nav.markalar")}</h1>
+
+    <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      {
+        markalar.map((m) => (
+          <a
+            href={dilliYol(aktifDil, `marka/${m.slug}`)}
+            class="flex items-center justify-between gap-2 rounded border border-kenarlik bg-kagit px-4 py-3 text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
+          >
+            <span class="font-medium">{m.ad}</span>
+            <span class="parca-no shrink-0 text-xs text-murekkep/50">{m.sayi}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

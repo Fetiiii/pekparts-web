@@ -4,12 +4,12 @@ import SearchBox from "@/components/SearchBox.astro";
 import { ceviriYap } from "@/i18n/utils";
 import { varsayilanDil } from "@/i18n/ui";
 
-// Statik 404 — dil öneki yok, varsayılan dil (tr) kullanılır. Netlify bunu
+// Statik 404 — dil öneki yok, varsayılan dil (en) kullanılır. Netlify bunu
 // bulunamayan yollarda sunar. Boş-arama mantığı: kullanıcıyı kaybetme,
 // aramaya ve WhatsApp'a yönlendir (Layout sabit WhatsApp butonu zaten var).
-const dil = varsayilanDil;
+const dil = varsayilanDil; // en
 const t = ceviriYap(dil);
-const tEn = ceviriYap("en");
+const tTr = ceviriYap("tr");
 ---
 
 <Layout baslik={t("404.baslik")}>
@@ -17,7 +17,7 @@ const tEn = ceviriYap("en");
     <p class="parca-no text-4xl font-bold text-bakir-koyu">404</p>
     <h1 class="mt-3 text-2xl font-bold tracking-tight">{t("404.baslik")}</h1>
     <p class="mx-auto mt-3 max-w-md text-murekkep/75">{t("404.metin")}</p>
-    <p class="mx-auto mt-1 max-w-md text-sm text-murekkep/55">{tEn("404.metin")}</p>
+    <p class="mx-auto mt-1 max-w-md text-sm text-murekkep/55">{tTr("404.metin")}</p>
 
     <div class="mx-auto mt-8 max-w-md">
       <SearchBox aktifDil={dil} buyuk />
