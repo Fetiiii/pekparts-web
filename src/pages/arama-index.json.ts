@@ -27,6 +27,7 @@ export const GET: APIRoute = async () => {
       parcaNo: u.parcaNo,
       ad: u.ad,
       marka: u.markaAd,
+      markaSlug: u.markaSlug,
       motorOzet: u.motorlar.slice(0, 3).map((m) => m.ad),
       motorFazla: Math.max(0, u.motorlar.length - 3),
       stok: u.stokDurumu,

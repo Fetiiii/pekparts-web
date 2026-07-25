@@ -36,9 +36,9 @@ const ayarlar = await getAyarlar();
 const { baslik, aciklama, ogGorsel, ogTip = "website" } = Astro.props;
 const sayfaBaslik = baslik ? `${baslik} · ${marka.ad}` : `${marka.ad} — ${marka.unvan}`;
 const sayfaAciklama = aciklama ?? t("site.aciklama");
-// OG görseli: ürün sayfasında ilk görsel (Sanity CDN). Site geneli varsayılan
-// görsel firmadan gelince eklenir — yoksa og:image atlanır.
-const ogMutlak = ogGorsel ? new URL(ogGorsel, Astro.site).href : null;
+// OG görseli: ürün sayfasında ilk görsel (Sanity CDN); diğer sayfalarda site
+// varsayılanı (logolu /og-pekparts.png). Mutlak URL — WhatsApp önizlemesi için.
+const ogMutlak = new URL(ogGorsel ?? "/og-pekparts.png", Astro.site).href;
 
 // hreflang: her dil için, dil öneki soyulmuş yol üzerinden mutlak URL (sonda /).
 const kalanYol = yolunGerisi(Astro.url); // öneksiz yol
@@ -76,10 +76,11 @@ const indexlenebilir =
     <meta property="og:description" content={sayfaAciklama} />
     <meta property="og:url" content={kanonik} />
     <meta property="og:locale" content={aktifDil} />
-    {ogMutlak && <meta property="og:image" content={ogMutlak} />}
-    {ogMutlak && <meta name="twitter:card" content="summary_large_image" />}
+    <meta property="og:image" content={ogMutlak} />
+    <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     
     {import.meta.env.PUBLIC_SITE_INDEXABLE !== "true" && (
     <meta name="robots" content="noindex, nofollow" />

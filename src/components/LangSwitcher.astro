@@ -1,6 +1,6 @@
 ---
 import { dilAdlari, diller, type Dil } from "@/i18n/ui";
-import { ceviriYap, yolunGerisi } from "@/i18n/utils";
+import { ceviriYap, yolunGerisi, dilliYol } from "@/i18n/utils";
 
 interface Props {
   aktifDil: Dil;
@@ -27,7 +27,7 @@ const kalan = yolunGerisi(url); // dil öneki soyulmuş yol
   >
     {
       diller.map((d) => {
-        const hedef = kalan ? `/${d}/${kalan}` : `/${d}/`;
+        const hedef = dilliYol(d, kalan); // sonda slash (trailingSlash: "always")
         const secili = d === aktifDil;
         return (
           <li>
@@ -49,6 +49,10 @@ const kalan = yolunGerisi(url); // dil öneki soyulmuş yol
     }
   </ul>
 </details>
+
+<script>
+  import "@/scripts/dil.ts";
+</script>
 
 <style>
   /* Varsayılan disclosure okunu gizle (kendi ▾ işaretimiz var). */

@@ -4,6 +4,7 @@ import SearchBox from "@/components/SearchBox.astro";
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
 import { getAyarlar } from "@/lib/ayarlar";
+import { markaAdi } from "@/lib/katalog";
 
 export function getStaticPaths() {
   return diller.map((lang) => ({ params: { lang } }));
@@ -21,6 +22,7 @@ const config = {
   waMesaj: t("ara.waMesaj"),
   urunYol: dilliYol(aktifDil, "urun/"),
   araYol: dilliYol(aktifDil, "ara"),
+  ithalAd: markaAdi("ithal", "İthal", aktifDil),
   ceviri: {
     fiyatSor: t("urun.fiyatSor"),
     digerMotor: t("urun.digerMotor"),

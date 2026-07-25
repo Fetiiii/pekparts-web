@@ -7,6 +7,7 @@ interface Kayit {
   parcaNo: string;
   ad: Record<string, string | undefined>;
   marka: string;
+  markaSlug: string;
   motorOzet: string[];
   motorFazla: number;
   stok: string;
@@ -22,6 +23,7 @@ interface Config {
   waMesaj: string; // "... {sorgu}"
   urunYol: string; // "/tr/urun/"
   araYol: string; // "/tr/ara"
+  ithalAd: string; // "ithal" markasının dile göre adı (İngilizce: Imported)
   ceviri: {
     fiyatSor: string;
     digerMotor: string; // "+{sayi} motor daha"
@@ -102,7 +104,8 @@ function kartHtml(k: Kayit, c: Config): string {
     <a href="${url}" class="block aspect-4/3 overflow-hidden border-b border-kenarlik bg-yuzey no-underline" tabindex="-1" aria-hidden="true">
       ${gorselIc}
     </a>
-    <div class="flex flex-1 flex-col gap-2 p-3">
+    <div class="flex flex-1 flex-col gap-1.5 p-3">
+      <p class="text-xs font-medium text-murekkep/55">${kacis(k.markaSlug === "ithal" ? c.ithalAd : k.marka)}</p>
       <p class="parca-no text-sm font-semibold text-bakir-koyu">${kacis(k.parcaNo)}</p>
       <h3 class="text-sm leading-snug font-medium"><a href="${url}" class="text-murekkep no-underline hover:text-vurgu">${ad}</a></h3>
       ${motor}

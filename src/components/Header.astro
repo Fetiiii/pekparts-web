@@ -21,15 +21,15 @@ const menu = [
 <header class="border-b border-kenarlik bg-kagit">
   <div class="mx-auto max-w-6xl px-4">
     <div class="relative flex items-center justify-between gap-4 py-3">
-      <!-- Logo: metin. Vektörel logo (SVG) firmadan gelince buraya girer (§15). -->
-      <a
-        href={dilliYol(aktifDil)}
-        class="flex shrink-0 items-baseline gap-2 text-murekkep no-underline"
-      >
-        <span class="text-xl font-bold tracking-tight">{marka.ad}</span>
-        <span class="hidden text-xs text-murekkep/60 sm:inline">
-          {marka.unvan}
-        </span>
+      <!-- Logo (§15): firmanın logosu. width/height ile CLS önlenir. -->
+      <a href={dilliYol(aktifDil)} class="flex shrink-0 items-center no-underline">
+        <img
+          src="/logo.png"
+          alt={`${marka.ad} — ${marka.unvan}`}
+          width="519"
+          height="120"
+          class="h-11 w-auto sm:h-14"
+        />
       </a>
 
       <!-- Masaüstü arama -->

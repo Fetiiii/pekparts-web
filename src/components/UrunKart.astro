@@ -1,6 +1,6 @@
 ---
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
-import { yerelDeger, type ZenginUrun } from "@/lib/katalog";
+import { yerelDeger, markaAdi, type ZenginUrun } from "@/lib/katalog";
 import Rozet from "./Rozet.astro";
 
 interface Props {
@@ -11,6 +11,7 @@ const { urun, aktifDil } = Astro.props;
 const t = ceviriYap(aktifDil);
 
 const ad = yerelDeger(urun.ad, aktifDil);
+const markaGoster = markaAdi(urun.markaSlug, urun.markaAd, aktifDil);
 const detayYol = dilliYol(aktifDil, `urun/${urun.slug}`);
 
 // Görsel URL'i adaptörde çözülür (yerel dosya veya Sanity CDN). Yoksa yer tutucu.
@@ -62,7 +63,8 @@ const motorSluglari = urun.motorlar.map((m) => m.slug).join(",");
     }
   </a>
 
-  <div class="flex flex-1 flex-col gap-2 p-3">
+  <div class="flex flex-1 flex-col gap-1.5 p-3">
+    <p class="text-xs font-medium text-murekkep/55">{markaGoster}</p>
     <p class="parca-no text-sm font-semibold text-bakir-koyu">{urun.parcaNo}</p>
 
     <h3 class="text-sm leading-snug font-medium">

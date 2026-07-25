@@ -1,0 +1,36 @@
+---
+import { ceviriYap, type Dil } from "@/i18n/utils";
+import { whatsappLink } from "@/site";
+import { getAyarlar } from "@/lib/ayarlar";
+
+interface Props {
+  aktifDil: Dil;
+}
+const { aktifDil } = Astro.props;
+const t = ceviriYap(aktifDil);
+const ayarlar = await getAyarlar();
+// "Aradığınızı bulamadınız mı? WhatsApp'tan parça sor" — dönüşüm teşviki (§6).
+---
+
+<section class="border-t border-kenarlik bg-yuzey">
+  <div
+    class="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <h2 class="text-lg font-semibold">{t("sor.baslik")}</h2>
+      <p class="mt-1 text-murekkep/70">{t("sor.metin")}</p>
+    </div>
+    <a
+      href={whatsappLink(ayarlar.whatsapp, t("whatsapp.mesaj"))}
+      rel="noopener"
+      class="inline-flex shrink-0 items-center gap-2 rounded bg-vurgu px-5 py-3 font-medium text-kagit no-underline hover:bg-vurgu/90"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path
+          d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.38a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2zm5.8 14.16c-.24.68-1.4 1.3-1.94 1.34-.5.05-1.12.07-1.8-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.12 1-2.4.26-.29.57-.36.76-.36l.55.01c.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.14.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.57.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.42.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.39-.24.65-.14.26.09 1.67.79 1.96.93.29.14.48.21.55.33.07.12.07.69-.17 1.37z"
+        ></path>
+      </svg>
+      {t("sor.buton")}
+    </a>
+  </div>
+</section>

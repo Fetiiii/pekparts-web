@@ -2,7 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
-import { tumUrunler } from "@/lib/katalog";
+import { tumUrunler, markaAdi } from "@/lib/katalog";
 
 export function getStaticPaths() {
   return diller.map((lang) => ({ params: { lang } }));
@@ -33,7 +33,7 @@ const markalar = [...markaMap.values()].sort((a, b) => b.sayi - a.sayi);
             href={dilliYol(aktifDil, `marka/${m.slug}`)}
             class="flex items-center justify-between gap-2 rounded border border-kenarlik bg-kagit px-4 py-3 text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
           >
-            <span class="font-medium">{m.ad}</span>
+            <span class="font-medium">{markaAdi(m.slug, m.ad, aktifDil)}</span>
             <span class="parca-no shrink-0 text-xs text-murekkep/50">{m.sayi}</span>
           </a>
         ))

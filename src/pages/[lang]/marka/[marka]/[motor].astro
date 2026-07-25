@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import UrunListe from "@/components/UrunListe.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
-import { tumUrunler, markaMotorCiftleri } from "@/lib/katalog";
+import { tumUrunler, markaMotorCiftleri, markaAdi } from "@/lib/katalog";
 
 export async function getStaticPaths() {
   const ciftler = await markaMotorCiftleri();
@@ -21,7 +21,7 @@ const t = ceviriYap(aktifDil);
 const urunler = (await tumUrunler()).filter(
   (u) => u.markaSlug === marka && u.motorlar.some((m) => m.slug === motor),
 );
-const markaAd = urunler[0]?.markaAd ?? marka!;
+const markaAd = markaAdi(marka!, urunler[0]?.markaAd ?? marka!, aktifDil);
 const motorAd = urunler[0]?.motorlar.find((m) => m.slug === motor)?.ad ?? motor!;
 const baslik = t("liste.markaMotorBaslik", { marka: markaAd, motor: motorAd });
 ---

@@ -52,6 +52,13 @@ const tr: UISozluk = {
   "whatsapp.acikla": "WhatsApp'tan yazın",
   "whatsapp.mesaj": "Merhaba, bir parça hakkında bilgi almak istiyorum.",
 
+  // Ürün WhatsApp sipariş/sor + "bulamadın mı?" teşviki
+  "urun.whatsappSiparis": "WhatsApp'tan sor / sipariş ver",
+  "urun.whatsappMesaj": "Merhaba, bu parça hakkında bilgi almak istiyorum:\n{marka} · {no} · {ad}",
+  "sor.baslik": "Aradığınızı bulamadınız mı?",
+  "sor.metin": "Parça numarasını veya parçanın fotoğrafını WhatsApp'tan gönderin; bulup size dönelim.",
+  "sor.buton": "WhatsApp'tan parça sor",
+
   "hero.baslik": "Aradığınız parçayı numarasıyla bulun",
   "hero.altbaslik":
     "Deutz başta olmak üzere iş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça. Numarayı girin, biz stoğu kontrol edelim.",
@@ -192,6 +199,13 @@ const en: UISozluk = {
 
   "whatsapp.acikla": "Message us on WhatsApp",
   "whatsapp.mesaj": "Hello, I would like information about a part.",
+
+  // Product WhatsApp ask/order + "can't find it?" prompt
+  "urun.whatsappSiparis": "Ask / order on WhatsApp",
+  "urun.whatsappMesaj": "Hello, I'd like information about this part:\n{marka} · {no} · {ad}",
+  "sor.baslik": "Can't find what you're looking for?",
+  "sor.metin": "Send the part number or a photo of the part on WhatsApp and we'll find it and get back to you.",
+  "sor.buton": "Ask for a part on WhatsApp",
 
   "hero.baslik": "Find your part by its number",
   "hero.altbaslik":

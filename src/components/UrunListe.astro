@@ -3,6 +3,7 @@ import { ceviriYap, type Dil } from "@/i18n/utils";
 import type { ZenginUrun } from "@/lib/katalog";
 import UrunKart from "./UrunKart.astro";
 import FiltreBar from "./FiltreBar.astro";
+import WhatsAppSor from "./WhatsAppSor.astro";
 
 interface Props {
   aktifDil: Dil;
@@ -55,6 +56,9 @@ const t = ceviriYap(aktifDil);
     {t("liste.sonucYok")}
   </p>
 </section>
+
+<!-- "Aradığınızı bulamadınız mı? WhatsApp'tan parça sor" -->
+<WhatsAppSor aktifDil={aktifDil} />
 
 <script>
   import "@/scripts/filtre.ts";

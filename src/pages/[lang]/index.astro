@@ -6,7 +6,7 @@ import { ceviriYap, dilliYol, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
 import { whatsappLink, marka } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
-import { tumUrunler, yerelDeger } from "@/lib/katalog";
+import { tumUrunler, yerelDeger, markaAdi } from "@/lib/katalog";
 
 export function getStaticPaths() {
   return diller.map((lang) => ({ params: { lang } }));
@@ -100,7 +100,7 @@ const isletmeLd = {
                   href={dilliYol(aktifDil, `marka/${m.slug}`)}
                   class="inline-flex items-center gap-1.5 rounded border border-kenarlik bg-kagit px-3 py-1.5 text-sm text-murekkep no-underline hover:border-vurgu hover:text-vurgu"
                 >
-                  {m.ad}
+                  {markaAdi(m.slug, m.ad, aktifDil)}
                   <span class="parca-no text-xs text-murekkep/45">{m.sayi}</span>
                 </a>
               </li>

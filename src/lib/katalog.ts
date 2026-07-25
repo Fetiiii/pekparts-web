@@ -16,6 +16,18 @@ export function yerelDeger(alan: Cevrilebilir | undefined, dil: Dil): string {
   return alan[dil] || alan.en || alan.tr || "";
 }
 
+// Gerçek marka olmayan özel değerler dile göre gösterilir (ör. "ithal").
+const OZEL_MARKA_ADLARI: Record<string, Partial<Record<Dil, string>>> = {
+  ithal: { tr: "İthal", en: "Imported", ar: "مستورد", ru: "Импортный" },
+};
+
+/** Marka adını dile göre verir. Gerçek markalar aynen; "ithal" gibi özel
+ *  değerler çevrilir (İngilizce'de "Imported"). */
+export function markaAdi(slug: string, ad: string, dil: Dil): string {
+  const ozel = OZEL_MARKA_ADLARI[slug];
+  return ozel?.[dil] ?? ozel?.en ?? ad;
+}
+
 const GORSEL_DIZINI = join(process.cwd(), "public", "urun-gorselleri");
 const canli = ["1", "true", "evet"].includes(String(process.env.CANLI ?? "").toLowerCase());
 

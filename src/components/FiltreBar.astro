@@ -1,6 +1,6 @@
 ---
 import { ceviriYap, type Dil } from "@/i18n/utils";
-import { yerelDeger, type ZenginUrun } from "@/lib/katalog";
+import { yerelDeger, markaAdi, type ZenginUrun } from "@/lib/katalog";
 
 interface Props {
   aktifDil: Dil;
@@ -24,7 +24,7 @@ const kategoriSecenek = benzersiz(
 ).sort((a, b) => a.etiket.localeCompare(b.etiket, aktifDil));
 
 const markaSecenek = benzersiz(
-  urunler.map((u) => ({ deger: u.markaSlug, etiket: u.markaAd })),
+  urunler.map((u) => ({ deger: u.markaSlug, etiket: markaAdi(u.markaSlug, u.markaAd, aktifDil) })),
   (x) => x.deger,
 ).sort((a, b) => a.etiket.localeCompare(b.etiket, aktifDil));
 

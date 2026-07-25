@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import UrunListe from "@/components/UrunListe.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
 import { diller } from "@/i18n/ui";
-import { tumUrunler } from "@/lib/katalog";
+import { tumUrunler, markaAdi } from "@/lib/katalog";
 
 export async function getStaticPaths() {
   const urunler = await tumUrunler();
@@ -18,7 +18,7 @@ const { marka } = Astro.params;
 const t = ceviriYap(aktifDil);
 
 const urunler = (await tumUrunler()).filter((u) => u.markaSlug === marka);
-const markaAd = urunler[0]?.markaAd ?? marka!;
+const markaAd = markaAdi(marka!, urunler[0]?.markaAd ?? marka!, aktifDil);
 const baslik = t("liste.markaBaslik", { ad: markaAd });
 ---
 
