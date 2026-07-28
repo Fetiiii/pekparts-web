@@ -79,6 +79,10 @@ const girisSinif =
       </label>
     </div>
 
+ <div class="sm:col-span-2">
+      <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>
+    </div>
+
     <div class="sm:col-span-2">
       <button
         type="submit"
@@ -110,3 +114,4 @@ const girisSinif =
 <script>
   import "@/scripts/teklif.ts";
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
