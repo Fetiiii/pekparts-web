@@ -86,6 +86,9 @@ const tr: UISozluk = {
   "home.hakkindaMetin":
     "İş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça tedarik ediyoruz — başta Deutz olmak üzere. Parça numarasıyla arayın, stok durumunu aynı gün paylaşalım.",
   "home.hakkindaBag": "Daha fazla bilgi",
+  "home.seoBaslik": "Deutz Yedek Parça Tedarikçisi ve İhracatçısı",
+"home.seoAciklama":
+  "Deutz motor yedek parçaları: filtre, conta, yakıt sistemi parçaları. İş makinesi, jeneratör, traktör ve otobüs motorları için stoktan dünya geneline ihracat.",
 
   "footer.hakkinda": "Kurumsal",
   "footer.iletisim": "İletişim",
@@ -234,6 +237,10 @@ const en: UISozluk = {
   "home.hakkindaMetin":
     "We supply spare parts for construction machinery, generator, tractor and bus engines — Deutz above all. Search by part number and we'll share stock status the same day.",
   "home.hakkindaBag": "Learn more",
+  "home.seoBaslik": "Deutz Spare Parts Supplier & Exporter",
+"home.seoAciklama":
+  "Deutz engine spare parts: filters, gaskets, fuel system components. In-stock spare parts for construction machinery, generators, tractors, and buses — shipped worldwide.",
+  
 
   "footer.hakkinda": "Company",
   "footer.iletisim": "Contact",
