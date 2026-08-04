@@ -12,6 +12,7 @@ export interface TeklifVeri {
   dil?: string;
   kvkk?: string | boolean;
   website?: string; // honeypot — gerçek kullanıcı boş bırakır
+  "cf-turnstile-response"?: string; // Cloudflare Turnstile doğrulama jetonu
 }
 
 export interface TeklifConfig {
@@ -20,12 +21,13 @@ export interface TeklifConfig {
   talepEpostasiYedek?: string; // Sanity'den okunamazsa
   sanity?: { projectId: string; dataset: string; token: string };
   ip?: string;
+  turnstileSecret?: string; // Cloudflare Turnstile gizli anahtarı
 }
 
 export interface TeklifSonuc {
   ok: boolean;
   status: number;
-  kod: "ok" | "kvkk" | "eksik" | "oran" | "yapilandirma" | "eposta";
+  kod: "ok" | "kvkk" | "eksik" | "oran" | "yapilandirma" | "eposta" | "captcha";
 }
 
 // —— Oran sınırlama (best-effort, bellek içi). Kalıcı sınırlama için host KV /
@@ -44,10 +46,36 @@ function oranAsildi(ip: string): boolean {
 const dogru = (v: unknown) =>
   v === true || v === "true" || v === "on" || v === "1" || v === "evet";
 
+// Cloudflare Turnstile jetonunu sunucu tarafında doğrular.
+// turnstileSecret yapılandırılmamışsa bu adım hiç çalışmaz (geriye dönük uyumlu).
+async function turnstileDogrula(secret: string, token: string, ip?: string): Promise<boolean> {
+  try {
+    const body = new URLSearchParams({ secret, response: token });
+    if (ip) body.set("remoteip", ip);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body,
+    });
+    const j = (await r.json()) as { success: boolean };
+    return j.success === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function teklifIsle(veri: TeklifVeri, config: TeklifConfig): Promise<TeklifSonuc> {
   // 1) Honeypot — doluysa bot; başarılıymış gibi sessizce yut (CAPTCHA yok, §9).
   if (veri.website && String(veri.website).trim() !== "") {
     return { ok: true, status: 200, kod: "ok" };
+  }
+
+  // 1.5) Turnstile doğrulaması — yapılandırılmışsa jeton kontrol edilir.
+  if (config.turnstileSecret) {
+    const token = veri["cf-turnstile-response"];
+    if (!token || !(await turnstileDogrula(config.turnstileSecret, token, config.ip))) {
+      return { ok: false, status: 403, kod: "captcha" };
+    }
   }
 
   // 2) KVKK onayı zorunlu
