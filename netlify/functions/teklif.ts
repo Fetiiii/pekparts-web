@@ -1,9 +1,7 @@
 import type { Handler } from "@netlify/functions";
 import { teklifIsle, type TeklifVeri } from "./lib/teklif-core";
-
 // Netlify'a özel İNCE sarmalayıcı. Tüm mantık host-nötr teklif-core'da.
 // Host değişirse yalnızca bu dosya yeniden yazılır.
-
 function config() {
   const projectId = process.env.SANITY_PROJECT_ID;
   const dataset = process.env.SANITY_DATASET ?? "production";
@@ -13,15 +11,14 @@ function config() {
     from: process.env.TEKLIF_FROM ?? "Pekparts <bildirim@pekparts.com>",
     talepEpostasiYedek: process.env.TALEP_EPOSTA,
     sanity: projectId && token ? { projectId, dataset, token } : undefined,
+    turnstileSecret: process.env.TURNSTILE_SECRET_KEY,
   };
 }
-
 function govdeAyristir(body: string, tur: string): TeklifVeri {
   if (tur.includes("application/json")) return JSON.parse(body || "{}");
   const p = new URLSearchParams(body);
   return Object.fromEntries(p.entries()) as TeklifVeri;
 }
-
 export const handler: Handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Yalnızca POST" };
@@ -33,13 +30,10 @@ export const handler: Handler = async (event) => {
   } catch {
     return { statusCode: 400, body: JSON.stringify({ kod: "eksik" }) };
   }
-
   const ip =
     event.headers["x-nf-client-connection-ip"] ??
     (event.headers["x-forwarded-for"] ?? "").split(",")[0].trim();
-
   const sonuc = await teklifIsle(veri, { ...config(), ip });
-
   // JS'siz gönderim (form-encoded): basit HTML onay/uyarı döndür.
   if (!tur.includes("application/json")) {
     const html = sonuc.ok
@@ -51,7 +45,6 @@ export const handler: Handler = async (event) => {
       body: html,
     };
   }
-
   return {
     statusCode: sonuc.status,
     headers: { "content-type": "application/json" },
