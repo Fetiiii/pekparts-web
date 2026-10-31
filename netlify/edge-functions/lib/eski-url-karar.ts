@@ -6,8 +6,10 @@ export type Karar =
   | { tip: "410" }
   | { tip: "gecir" };
 
+import { URUN_SLUGLARI } from "./urun-sluglari.ts";
+
 // Eski gerçek ürün sayfaları: /<slug>/p/<id> → yeni ürün URL'si (301, birebir).
-// Yalnız bu 9 id'nin karşılığı var; diğerleri geçer (doğal 404).
+// Bu haritadaki id'ler önce denenir; diğerlerinde parça no eski slug'dan okunur.
 const URUN_HARITA: Record<string, string> = {
   "1504": "/en/urun/04289952/",
   "1534": "/en/urun/02937551/",
@@ -52,6 +54,10 @@ const ULKELER = new Set([
   "venezuela","vietnam","yemen","zambia","zimbabwe","uae","uk","usa",
 ]);
 
+// Eski ülke sayfalarının kategori önekleri. Ülke listesinde olmayan yerler
+// (/engines-tonga, /filters-comoros) bu önekle yine 410 döner.
+const SPAM_ONEK = /^(spare-parts|engine-parts|engines|filters|gaskets|pistons)-/;
+
 function ulkeIleBitiyor(segment: string): boolean {
   // "gaskets-albania", "engine-parts-saudi-arabia" → sondaki ülke adını bul.
   for (const ulke of ULKELER) {
@@ -67,7 +73,9 @@ export function eskiUrlKarari(pathname: string): Karar {
   // /<slug>/p/<id> — başı değişken/çok-segmentli olabilir
   const urunEsl = yol.match(/\/p\/(\d+)$/);
   if (urunEsl) {
-    const hedef = URUN_HARITA[urunEsl[1]];
+    // "/01174696-deutz-yakit-filtresi---deutz-01174696-fuel-filter/p/1350" → 01174696
+    const parcaNo = yol.split(/[-/]/).find((parca) => URUN_SLUGLARI.has(parca));
+    const hedef = URUN_HARITA[urunEsl[1]] ?? (parcaNo && `/en/urun/${parcaNo}/`);
     return hedef ? { tip: "301", hedef } : { tip: "gecir" };
   }
 
@@ -79,7 +87,7 @@ export function eskiUrlKarari(pathname: string): Karar {
 
   // Kök seviye tek segment <kelime>-<ülke> → 410 (spam)
   const kokEsl = yol.match(/^\/([a-z0-9-]+)$/);
-  if (kokEsl && ulkeIleBitiyor(kokEsl[1])) {
+  if (kokEsl && (SPAM_ONEK.test(kokEsl[1]) || ulkeIleBitiyor(kokEsl[1]))) {
     return { tip: "410" };
   }
 

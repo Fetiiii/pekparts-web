@@ -18,6 +18,9 @@ esit("/some/deep/path/p/1534", "301→/en/urun/02937551/");
 esit("/x/p/1500", "301→/en/urun/0-065-1558-6-10/"); // SDF
 esit("/urun-adi/p/1349/", "301→/en/urun/01172715/"); // sonda slash
 esit("/eski/p/9999", "gecir"); // haritada yok → geçer (doğal 404)
+esit("/01174696-deutz-yakit-filtresi---deutz-01174696-fuel-filter/p/1350", "301→/en/urun/01174696/"); // slug'dan parça no
+esit("/04235315-deutz-yaglama-jeti---deutz-04235315-piston-cooling-nozzle/p/1394", "301→/en/urun/04235315/");
+esit("/99999999-yok/p/1351", "gecir"); // katalogda olmayan parça
 
 console.log("\n— Marka/kategori liste sayfaları:");
 esit("/cnh/k/245", "301→/en/marka/cnh/");
@@ -31,6 +34,10 @@ esit("/pistons-kosovo", "410");
 esit("/spare-parts-saudi-arabia", "410"); // çok kelimeli ülke
 esit("/filters-united-arab-emirates", "410");
 esit("/gaskets-albania/", "410"); // sonda slash
+esit("/engines-burkina", "410"); // ülke listesinde yok, önekten yakalanır
+esit("/engine-parts-tuvalu", "410");
+esit("/filters-comoros", "410");
+esit("/filters-st-kitts-nevis", "410");
 
 console.log("\n— GEÇMESİ gerekenler (gerçek sayfalar / güvenlik):");
 esit("/en/urun/04289952/", "gecir");
