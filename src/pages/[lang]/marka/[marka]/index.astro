@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import UrunListe from "@/components/UrunListe.astro";
 import { ceviriYap, type Dil } from "@/i18n/utils";
 import { aktifDiller } from "@/i18n/ui";
-import { tumUrunler, markaAdi } from "@/lib/katalog";
+import { tumUrunler, markaAdi, yerelDeger } from "@/lib/katalog";
 
 export async function getStaticPaths() {
   const urunler = await tumUrunler();
@@ -20,9 +20,24 @@ const t = ceviriYap(aktifDil);
 const urunler = (await tumUrunler()).filter((u) => u.markaSlug === marka);
 const markaAd = markaAdi(marka!, urunler[0]?.markaAd ?? marka!, aktifDil);
 const baslik = t("liste.markaBaslik", { ad: markaAd });
+// Benzersiz meta açıklama: markanın en dolu 3 kategorisinden üretilir (§11).
+const kategoriSayilari = new Map<string, number>();
+for (const u of urunler) {
+  const ad = yerelDeger(u.kategoriAd, aktifDil);
+  kategoriSayilari.set(ad, (kategoriSayilari.get(ad) ?? 0) + 1);
+}
+const aciklama = t("liste.markaAciklama", {
+  ad: markaAd,
+  kategoriler: [...kategoriSayilari.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([ad]) => ad)
+    .join(", "),
+  sayi: urunler.length,
+});
 ---
 
-<Layout baslik={baslik}>
+<Layout baslik={baslik} aciklama={aciklama}>
   <UrunListe
     aktifDil={aktifDil}
     baslik={baslik}

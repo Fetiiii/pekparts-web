@@ -8,6 +8,12 @@ export const marka = {
   ad: "Pekparts",
   unvan: "Pekmezcioğlu Otomotiv", // TODO: tam resmi unvan (Sanity'de de tutulabilir)
   alanAdi: "pekparts.com",
+  kurulus: "1976",
+  // Yapılandırılmış veri için. Adres/saat panelde değişirse burası da güncellenir.
+  postaKodu: "34490",
+  ilce: "Başakşehir",
+  il: "İstanbul",
+  acilisSaatleri: ["Mo-Fr 09:00-17:00", "Sa 09:00-14:00"],
 } as const;
 
 // Geliştirme yedeği — Şartname §15: gerçeği panelden (siteAyarlari) girilecek.

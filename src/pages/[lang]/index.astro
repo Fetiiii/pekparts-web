@@ -35,8 +35,15 @@ for (const u of urunler) {
 }
 const markalar = [...markaMap.values()].sort((a, b) => b.sayi - a.sayi);
 
-// Öne çıkan 8: tumUrunler zaten oneCikan-first sıralı; ilk 8'i al.
-const oneCikanlar = urunler.slice(0, 8);
+// Öne çıkan 8: önce panelde işaretlenenler, sonra Deutz parçaları (alfabetik
+// sıra ana sayfayı küçük markalarla açmasın).
+const oneCikanlar = [...urunler]
+  .sort(
+    (a, b) =>
+      Number(b.oneCikan) - Number(a.oneCikan) ||
+      Number(b.markaSlug === "deutz") - Number(a.markaSlug === "deutz"),
+  )
+  .slice(0, 8);
 
 // schema.org LocalBusiness — firma bilgisi (§11).
 const isletmeLd = {
@@ -45,10 +52,22 @@ const isletmeLd = {
   name: marka.unvan,
   alternateName: marka.ad,
   url: new URL(`/${aktifDil}/`, Astro.site).href,
+  logo: new URL("/logo.png", Astro.site).href,
+  image: new URL("/og-pekparts.png", Astro.site).href,
+  foundingDate: marka.kurulus,
   telephone: ayarlar.telefon,
   email: ayarlar.eposta,
-  address: { "@type": "PostalAddress", streetAddress: ayarlar.adres, addressCountry: "TR" },
-  ...(ayarlar.calismaSaatleri ? { openingHours: ayarlar.calismaSaatleri } : {}),
+  address: {
+    "@type": "PostalAddress",
+    // Paneldeki tek satırlık adresten posta kodu ve sonrası ayrı alanlara taşınır.
+    streetAddress: ayarlar.adres.split(marka.postaKodu)[0].replace(/[,\s]+$/, ""),
+    addressLocality: marka.ilce,
+    addressRegion: marka.il,
+    postalCode: marka.postaKodu,
+    addressCountry: "TR",
+  },
+  openingHours: marka.acilisSaatleri,
+  ...(ayarlar.sosyal.length ? { sameAs: ayarlar.sosyal.map((s) => s.url) } : {}),
   description: t("site.aciklama"),
 };
 ---

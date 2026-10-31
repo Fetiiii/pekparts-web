@@ -27,6 +27,7 @@ function kur(form: HTMLFormElement) {
       });
       const j = (await r.json().catch(() => ({}))) as { ok?: boolean };
       if (r.ok && j.ok) {
+        (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.("event", "quote_form_submit");
         form.hidden = true;
         if (basari) {
           basari.hidden = false;

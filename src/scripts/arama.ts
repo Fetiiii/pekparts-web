@@ -98,7 +98,7 @@ function kartHtml(k: Kayit, c: Config): string {
   const url = kacis(c.urunYol.replace(/\/$/, "") + "/" + k.slug + "/");
   // Kapak: görsel varsa <img>, yoksa yer tutucu (liste kartıyla aynı davranış).
   const gorselIc = k.gorsel
-    ? `<img src="${kacis(k.gorsel)}" alt="${ad}" loading="lazy" decoding="async" class="h-full w-full object-cover">`
+    ? `<img src="${kacis(k.gorsel)}" alt="${ad}" loading="lazy" decoding="async" class="h-full w-full object-contain">`
     : `<span class="flex h-full w-full items-center justify-center text-murekkep/40"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg></span>`;
   return `<article class="urun-kart flex h-full flex-col overflow-hidden rounded border border-kenarlik bg-kagit">
     <a href="${url}" class="block aspect-4/3 overflow-hidden border-b border-kenarlik bg-yuzey no-underline" tabindex="-1" aria-hidden="true">

@@ -14,7 +14,7 @@ const t = ceviriYap(aktifDil);
 const ayarlar = await getAyarlar();
 ---
 
-<Layout baslik={t("nav.iletisim")}>
+<Layout baslik={t("nav.iletisim")} aciklama={t("seo.iletisim")}>
   <section class="mx-auto max-w-6xl px-4 py-12">
     <h1 class="text-2xl font-bold tracking-tight">{t("nav.iletisim")}</h1>
 
@@ -35,15 +35,15 @@ const ayarlar = await getAyarlar();
             </dd>
           </div>
           <div class="flex gap-4 py-3">
-            <dt class="w-32 shrink-0 text-murekkep/60">E-posta</dt>
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("iletisim.eposta")}</dt>
             <dd><a href={`mailto:${ayarlar.eposta}`} class="hover:underline">{ayarlar.eposta}</a></dd>
           </div>
           <div class="flex gap-4 py-3">
-            <dt class="w-32 shrink-0 text-murekkep/60">Adres</dt>
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("iletisim.adres")}</dt>
             <dd class="text-murekkep/80">{ayarlar.adres}</dd>
           </div>
           <div class="flex gap-4 py-3">
-            <dt class="w-32 shrink-0 text-murekkep/60">{t("nav.iletisim")}</dt>
+            <dt class="w-32 shrink-0 text-murekkep/60">{t("iletisim.saatler")}</dt>
             <dd class="text-murekkep/80">{ayarlar.calismaSaatleri}</dd>
           </div>
         </dl>

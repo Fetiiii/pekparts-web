@@ -29,6 +29,13 @@ const aciklama = yerelDeger(urun.aciklama, aktifDil);
 const kategoriAd = yerelDeger(urun.kategoriAd, aktifDil);
 const markaGoster = markaAdi(urun.markaSlug, urun.markaAd, aktifDil);
 
+// Başlıkta marka + ad. "İthal" marka adı değildir, o yüzden başlığa girmez.
+const markaOneki =
+  urun.markaSlug === "ithal" || ad.toLowerCase().includes(urun.markaAd.toLowerCase())
+    ? ""
+    : `${urun.markaAd} `;
+const tamAd = `${markaOneki}${ad}`;
+
 // WhatsApp sipariş/sor — parça bilgisi ön-doldurulmuş (e-posta yerine WhatsApp'ı öne çıkar).
 const ayarlar = await getAyarlar();
 const waSiparis = whatsappLink(
@@ -41,11 +48,11 @@ const waSiparis = whatsappLink(
 const metaAciklama =
   aciklama ||
   [
-    `${ad} — ${urun.markaAd}, ${kategoriAd}.`,
-    `${t("urun.parcaNo")}: ${urun.parcaNo}.`,
+    `${tamAd} — ${t("urun.parcaNo")}: ${urun.parcaNo}.`,
     urun.motorlar.length
       ? `${t("urun.uyumluMotorlar")}: ${urun.motorlar.slice(0, 4).map((m) => m.ad).join(", ")}.`
       : "",
+    t("urun.seoKapanis"),
   ]
     .filter(Boolean)
     .join(" ");
@@ -65,20 +72,35 @@ const kanonik = new URL(dilliYol(aktifDil, `urun/${urun.slug}`), Astro.site).hre
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Product",
-  name: ad,
+  name: tamAd,
   sku: urun.parcaNo,
   mpn: urun.parcaNo,
-  brand: { "@type": "Brand", name: urun.markaAd },
+  ...(urun.markaSlug === "ithal" ? {} : { brand: { "@type": "Brand", name: urun.markaAd } }),
   category: kategoriAd,
   url: kanonik,
   ...(gorseller.length
     ? { image: gorseller.map((g) => new URL(g.yol, Astro.site).href) }
     : {}),
 };
+
+const kirintiLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { name: t("liste.tumUrunler"), yol: "urunler" },
+    { name: kategoriAd, yol: `urunler/${urun.kategoriSlug}` },
+    { name: urun.parcaNo, yol: `urun/${urun.slug}` },
+  ].map((k, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: k.name,
+    item: new URL(dilliYol(aktifDil, k.yol), Astro.site).href,
+  })),
+};
 ---
 
 <Layout
-  baslik={`${urun.parcaNo} · ${ad}`}
+  baslik={`${tamAd} ${urun.parcaNo}`}
   aciklama={metaAciklama}
   ogGorsel={gorseller[0]?.yol}
   ogTip="product"
@@ -108,7 +130,9 @@ const jsonLd = {
                   data-galeri-ana
                   src={gorseller[0].yol}
                   alt={gorseller[0].alt}
-                  class="h-full w-full object-cover"
+                  width="800"
+                  height="600"
+                  class="h-full w-full object-contain"
                 />
               </div>
               {gorseller.length > 1 && (
@@ -147,7 +171,7 @@ const jsonLd = {
       <div>
         <p class="text-sm font-medium text-murekkep/60">{markaGoster}</p>
         <p class="parca-no mt-0.5 text-lg font-semibold text-bakir-koyu">{urun.parcaNo}</p>
-        <h1 class="mt-1 text-2xl font-bold tracking-tight">{ad}</h1>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight">{tamAd}</h1>
 
         <div class="mt-3 flex flex-wrap gap-2">
           <Rozet deger={urun.stokDurumu} aktifDil={aktifDil} />
@@ -233,6 +257,7 @@ const jsonLd = {
   <WhatsAppSor aktifDil={aktifDil} />
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(kirintiLd)} />
   <script>
     import "@/scripts/galeri.ts";
   </script>

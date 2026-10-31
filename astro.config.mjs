@@ -33,8 +33,8 @@ export default defineConfig({
         defaultLocale: "en",
         locales: { en: "en", tr: "tr" },
       },
-      // Hata sayfaları (404/410) ve eski spam URL'leri sitemap'te olmaz.
-      filter: (sayfa) => !/\/(404|410)\/?$/.test(sayfa),
+      // Hata sayfaları (404/410), arama sayfası ve eski spam URL'leri sitemap'te olmaz.
+      filter: (sayfa) => !/\/(404|410|ara)\/?$/.test(sayfa),
     }),
   ],
   vite: {

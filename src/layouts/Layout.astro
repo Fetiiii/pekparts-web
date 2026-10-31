@@ -81,10 +81,6 @@ const indexlenebilir =
 
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    
-    {import.meta.env.PUBLIC_SITE_INDEXABLE !== "true" && (
-    <meta name="robots" content="noindex, nofollow" />
-    )}
 
 <!-- Google tag (gtag.js) -->
 <script
@@ -100,6 +96,18 @@ const indexlenebilir =
   gtag("js", new Date());
 
   gtag("config", "G-N2HK39G5MZ");
+
+  // Talep ölçümü: WhatsApp, telefon ve e-posta tıklamaları GA4 olayı olarak gider.
+  document.addEventListener("click", function (e) {
+    var bag = e.target.closest && e.target.closest("a[href]");
+    if (!bag) return;
+    var href = bag.getAttribute("href");
+    var olay = href.indexOf("https://wa.me/") === 0 ? "whatsapp_click"
+      : href.indexOf("tel:") === 0 ? "phone_click"
+      : href.indexOf("mailto:") === 0 ? "email_click"
+      : null;
+    if (olay) gtag("event", olay);
+  });
 </script>
 
   </head>

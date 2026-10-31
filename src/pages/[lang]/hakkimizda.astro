@@ -13,6 +13,6 @@ const t = ceviriYap(aktifDil);
 const sayfa = await sanitySayfa("hakkimizda"); // CMS'ten; yoksa null → yer tutucu
 ---
 
-<Layout baslik={t("nav.hakkimizda")}>
+<Layout baslik={t("nav.hakkimizda")} aciklama={t("seo.hakkimizda")}>
   <IcerikSayfa aktifDil={aktifDil} varsayilanBaslik={t("nav.hakkimizda")} sayfa={sayfa} />
 </Layout>

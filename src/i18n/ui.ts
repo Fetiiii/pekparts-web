@@ -65,9 +65,9 @@ const tr: UISozluk = {
   "sor.metin": "Parça numarasını veya parçanın fotoğrafını WhatsApp'tan gönderin; bulup size dönelim.",
   "sor.buton": "WhatsApp'tan parça sor",
 
-  "hero.baslik": "Aradığınız parçayı numarasıyla bulun",
+  "hero.baslik": "İstanbul'dan Deutz motor yedek parçaları",
   "hero.altbaslik":
-    "Deutz başta olmak üzere iş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça. Numarayı girin, biz stoğu kontrol edelim.",
+    "1976'dan beri sektörde. Deutz başta olmak üzere iş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça. Parça numarasını girin, biz stoğu kontrol edelim.",
 
   "yapim.baslik": "Katalog yükleniyor",
   "yapim.metin":
@@ -84,7 +84,7 @@ const tr: UISozluk = {
   "home.tumunuGor": "Tümünü gör",
   "home.hakkindaBaslik": "Pekparts hakkında",
   "home.hakkindaMetin":
-    "İş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça tedarik ediyoruz — başta Deutz olmak üzere. Parça numarasıyla arayın, stok durumunu aynı gün paylaşalım.",
+    "1976'dan beri iş makinesi, jeneratör, traktör ve otobüs motorları için yedek parça tedarik ediyoruz — başta Deutz olmak üzere. Parça numarasıyla arayın, stok durumunu aynı gün paylaşalım.",
   "home.hakkindaBag": "Daha fazla bilgi",
   "home.seoBaslik": "Deutz Yedek Parça Tedarikçisi ve İhracatçısı",
 "home.seoAciklama":
@@ -117,11 +117,23 @@ const tr: UISozluk = {
   "urun.gorselAcilim": "{ad} — parça no {no}",
   "urun.detay": "Ürün detayı",
   "urun.digerMotor": "+{sayi} motor daha",
+  "urun.seoKapanis": "Fiyat için WhatsApp'tan yazın veya teklif isteyin. İstanbul'dan gönderim.",
+
+  // Sayfa açıklamaları (SEO)
+  "seo.hakkimizda":
+    "1976'dan beri Deutz ve diğer dizel motorlar için yedek parça tedarik eden, İstanbul merkezli Pekmezcioğlu Otomotiv'in markası Pekparts hakkında.",
+  "seo.iletisim":
+    "Pekparts ile telefon, WhatsApp veya e-posta üzerinden iletişime geçin. Adres: İkitelli OSB, Başakşehir, İstanbul. Parça numaranızı gönderin, aynı gün dönelim.",
 
   // Listeleme + filtreler
   "liste.tumUrunler": "Tüm ürünler",
   "liste.kategoriBaslik": "{ad}",
   "liste.markaBaslik": "{ad} yedek parçaları",
+  "liste.markaAciklama":
+    "{ad} yedek parçaları: {kategoriler} ve daha fazlası. Katalogda {sayi} parça. Parça numarasıyla arayın, WhatsApp'tan fiyat alın.",
+  "liste.kategoriSeoBaslik": "{ad} – Motor Yedek Parçaları",
+  "liste.kategoriAciklama":
+    "{ad} kategorisinde {sayi} parça: {markalar}. Parça numarasıyla arayın, WhatsApp'tan fiyat alın. İstanbul'dan gönderim.",
   "liste.markaMotorBaslik": "{marka} · {motor}",
   "liste.sonucSayisi": "{sayi} ürün",
   "liste.sonucYok": "Bu filtrelerle eşleşen ürün yok.",
@@ -168,6 +180,9 @@ const tr: UISozluk = {
   "iletisim.formBaslik": "Bize yazın",
   "iletisim.harita": "Konum",
   "iletisim.bilgiler": "İletişim bilgileri",
+  "iletisim.eposta": "E-posta",
+  "iletisim.adres": "Adres",
+  "iletisim.saatler": "Çalışma saatleri",
 
   // 404
   "404.baslik": "Sayfa bulunamadı",
@@ -216,9 +231,9 @@ const en: UISozluk = {
   "sor.metin": "Send the part number or a photo of the part on WhatsApp and we'll find it and get back to you.",
   "sor.buton": "Ask for a part on WhatsApp",
 
-  "hero.baslik": "Find your part by its number",
+  "hero.baslik": "Deutz engine spare parts from Istanbul",
   "hero.altbaslik":
-    "Spare parts for construction machinery, generator, tractor and bus engines — Deutz first of all. Enter the number and we will check stock.",
+    "In the trade since 1976. Spare parts for construction machinery, generator, tractor and bus engines — Deutz first of all. Enter the part number and we will check stock.",
 
   "yapim.baslik": "Catalogue loading",
   "yapim.metin":
@@ -235,7 +250,7 @@ const en: UISozluk = {
   "home.tumunuGor": "View all",
   "home.hakkindaBaslik": "About Pekparts",
   "home.hakkindaMetin":
-    "We supply spare parts for construction machinery, generator, tractor and bus engines — Deutz above all. Search by part number and we'll share stock status the same day.",
+    "Since 1976 we have supplied spare parts for construction machinery, generator, tractor and bus engines — Deutz above all. Search by part number and we'll share stock status the same day.",
   "home.hakkindaBag": "Learn more",
   "home.seoBaslik": "Deutz Spare Parts Supplier & Exporter",
 "home.seoAciklama":
@@ -269,11 +284,23 @@ const en: UISozluk = {
   "urun.gorselAcilim": "{ad} — part no {no}",
   "urun.detay": "Product detail",
   "urun.digerMotor": "+{sayi} more engines",
+  "urun.seoKapanis": "Ask for a price on WhatsApp or request a quote. Shipped from Istanbul.",
+
+  // Page descriptions (SEO)
+  "seo.hakkimizda":
+    "About Pekparts, a brand of Pekmezcioğlu Otomotiv: an Istanbul supplier of spare parts for Deutz and other diesel engines since 1976.",
+  "seo.iletisim":
+    "Contact Pekparts by phone, WhatsApp or e-mail. Address: İkitelli OSB, Başakşehir, Istanbul. Send your part number and we reply the same day.",
 
   // Listing + filters
   "liste.tumUrunler": "All products",
   "liste.kategoriBaslik": "{ad}",
   "liste.markaBaslik": "{ad} spare parts",
+  "liste.markaAciklama":
+    "{ad} spare parts: {kategoriler} and more. {sayi} parts in our catalog. Search by part number and get a price on WhatsApp.",
+  "liste.kategoriSeoBaslik": "{ad} – Engine Spare Parts",
+  "liste.kategoriAciklama":
+    "{ad}: {sayi} parts in our catalog, including {markalar}. Search by part number and get a price on WhatsApp. Shipped from Istanbul.",
   "liste.markaMotorBaslik": "{marka} · {motor}",
   "liste.sonucSayisi": "{sayi} products",
   "liste.sonucYok": "No products match these filters.",
@@ -320,6 +347,9 @@ const en: UISozluk = {
   "iletisim.formBaslik": "Write to us",
   "iletisim.harita": "Location",
   "iletisim.bilgiler": "Contact details",
+  "iletisim.eposta": "E-mail",
+  "iletisim.adres": "Address",
+  "iletisim.saatler": "Working hours",
 
   // 404
   "404.baslik": "Page not found",

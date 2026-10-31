@@ -19,9 +19,18 @@ const t = ceviriYap(aktifDil);
 
 const urunler = (await tumUrunler()).filter((u) => u.kategoriSlug === kategori);
 const baslik = yerelDeger(urunler[0]?.kategoriAd, aktifDil) || kategori!;
+// Benzersiz meta açıklama: kategorideki markalardan üretilir (§11).
+const markalar = [
+  ...new Set(urunler.filter((u) => u.markaSlug !== "ithal").map((u) => u.markaAd)),
+];
+const aciklama = t("liste.kategoriAciklama", {
+  ad: baslik,
+  markalar: markalar.slice(0, 4).join(", ") || "Deutz",
+  sayi: urunler.length,
+});
 ---
 
-<Layout baslik={baslik}>
+<Layout baslik={t("liste.kategoriSeoBaslik", { ad: baslik })} aciklama={aciklama}>
   <UrunListe
     aktifDil={aktifDil}
     baslik={baslik}
