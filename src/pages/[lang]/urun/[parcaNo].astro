@@ -8,6 +8,7 @@ import { tumUrunler, yerelDeger, markaAdi } from "@/lib/katalog";
 import { whatsappLink } from "@/site";
 import { getAyarlar } from "@/lib/ayarlar";
 import WhatsAppSor from "@/components/WhatsAppSor.astro";
+import { numaraVaryantlari } from "@/lib/parcaNo";
 
 export async function getStaticPaths() {
   const urunler = await tumUrunler();
@@ -35,6 +36,7 @@ const markaOneki =
     ? ""
     : `${urun.markaAd} `;
 const tamAd = `${markaOneki}${ad}`;
+const varyantlar = numaraVaryantlari(urun.parcaNo, urun.muadilNo);
 
 // WhatsApp sipariş/sor — parça bilgisi ön-doldurulmuş (e-posta yerine WhatsApp'ı öne çıkar).
 const ayarlar = await getAyarlar();
@@ -48,7 +50,7 @@ const waSiparis = whatsappLink(
 const metaAciklama =
   aciklama ||
   [
-    `${tamAd} — ${t("urun.parcaNo")}: ${urun.parcaNo}.`,
+    `${tamAd} — ${t("urun.parcaNo")}: ${[urun.parcaNo, ...varyantlar].join(" / ")}.`,
     urun.motorlar.length
       ? `${t("urun.uyumluMotorlar")}: ${urun.motorlar.slice(0, 4).map((m) => m.ad).join(", ")}.`
       : "",
@@ -73,6 +75,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Product",
   name: tamAd,
+  ...(varyantlar.length ? { alternateName: varyantlar.map((v) => `${tamAd} ${v}`) } : {}),
   sku: urun.parcaNo,
   mpn: urun.parcaNo,
   ...(urun.markaSlug === "ithal" ? {} : { brand: { "@type": "Brand", name: urun.markaAd } }),
@@ -193,6 +196,14 @@ const kirintiLd = {
               <a href={dilliYol(aktifDil, `urunler/${urun.kategoriSlug}`)} class="hover:underline">{kategoriAd}</a>
             </dd>
           </div>
+          {
+            varyantlar.length > 0 && (
+              <div class="flex gap-4 py-2.5">
+                <dt class="w-32 shrink-0 text-murekkep/60">{t("urun.digerYazim")}</dt>
+                <dd class="parca-no">{varyantlar.join(" · ")}</dd>
+              </div>
+            )
+          }
           {
             urun.muadilNo.length > 0 && (
               <div class="flex gap-4 py-2.5">
